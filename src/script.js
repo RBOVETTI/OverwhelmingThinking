@@ -1,0 +1,1 @@
+console.log("Il sito è online!");
