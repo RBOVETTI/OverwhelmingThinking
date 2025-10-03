@@ -5,18 +5,20 @@
 }
 
 :root {
-    --primary-blue: #4a5d7c;
-    --light-blue: #6b7fa8;
-    --bg-gray: #f5f7fa;
-    --dark-gray: #2c3e50;
+    --primary-blue: #2c3e50;
+    --light-blue: #4a5d7c;
+    --bg-cream: #faf8f5;
+    --bg-light: #ffffff;
+    --dark-gray: #1a1a1a;
     --white: #ffffff;
     --border-gray: #e1e8ed;
     --text-gray: #5a6c7d;
+    --accent-gold: #d4af37;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--bg-gray);
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
+    background-color: var(--bg-cream);
     color: var(--dark-gray);
     line-height: 1.6;
 }
@@ -40,10 +42,27 @@ header {
 }
 
 .logo {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--primary-blue);
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.logo-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--dark-gray);
+    letter-spacing: 0.5px;
+}
+
+.logo-subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 300;
+    color: var(--text-gray);
+    letter-spacing: 2px;
+    text-transform: uppercase;
 }
 
 nav {
@@ -120,6 +139,132 @@ nav a:hover {
     padding: 0 2rem;
 }
 
+/* Hero Section */
+.hero-section {
+    background-color: var(--bg-light);
+    border-bottom: 1px solid var(--border-gray);
+}
+
+.hero-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 0;
+    min-height: 500px;
+}
+
+/* Slideshow Area */
+.hero-slideshow {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--dark-gray);
+}
+
+.slideshow-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.slideshow-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 1s ease-in-out;
+}
+
+.slideshow-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+    padding: 2rem;
+    color: white;
+}
+
+.slideshow-overlay h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.slideshow-overlay p {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.9;
+}
+
+/* Artist Info Area */
+.hero-artist {
+    background-color: var(--bg-cream);
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.artist-photo {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    border: 4px solid var(--accent-gold);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+.artist-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.artist-intro h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--dark-gray);
+    margin-bottom: 1rem;
+}
+
+.artist-intro p {
+    color: var(--text-gray);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+}
+
+.btn-artist {
+    padding: 0.875rem 2rem;
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-artist:hover {
+    background-color: var(--light-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Hero Section Hidden Class */
+.hero-section.hidden {
+    display: none;
+}
+
 /* Category Filter */
 .category-filter {
     display: flex;
@@ -177,7 +322,7 @@ nav a:hover {
     width: 100%;
     height: 300px;
     object-fit: cover;
-    background-color: var(--bg-gray);
+    background-color: var(--bg-cream);
 }
 
 .artwork-info {
@@ -232,7 +377,7 @@ nav a:hover {
 .detail-info .category-tag {
     display: inline-block;
     padding: 0.5rem 1rem;
-    background-color: var(--bg-gray);
+    background-color: var(--bg-cream);
     border-radius: 6px;
     color: var(--text-gray);
     font-size: 0.9rem;
@@ -467,5 +612,31 @@ nav a:hover {
 
     .gallery-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+
+    .hero-container {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+
+    .hero-slideshow {
+        min-height: 300px;
+    }
+
+    .hero-artist {
+        padding: 2rem 1.5rem;
+    }
+
+    .artist-photo {
+        width: 120px;
+        height: 120px;
+    }
+
+    .logo-name {
+        font-size: 1.5rem;
+    }
+
+    .logo-subtitle {
+        font-size: 0.65rem;
     }
 }

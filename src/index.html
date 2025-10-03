@@ -3,13 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Art Portfolio & Gallery</title>
+    <title>Riccardo Bovetti - Art Portfolio & Gallery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
         <div class="header-content">
-            <div class="logo" onclick="loadHome()">ART GALLERY</div>
+            <div class="logo" onclick="loadHome()">
+                <span class="logo-name">Riccardo Bovetti</span>
+                <span class="logo-subtitle">Art Portfolio & Gallery</span>
+            </div>
             <nav>
                 <a onclick="loadHome()" id="nav-home">Home</a>
                 <a onclick="loadAbout()" id="nav-about">Chi Sono</a>
@@ -25,6 +31,34 @@
             </nav>
         </div>
     </header>
+
+    <!-- Hero Section - Only visible on home page -->
+    <section class="hero-section" id="heroSection">
+        <div class="hero-container">
+            <!-- Slideshow Area (2/3) -->
+            <div class="hero-slideshow">
+                <div class="slideshow-wrapper">
+                    <img id="slideshowImage" src="" alt="Featured Artwork" class="slideshow-image">
+                    <div class="slideshow-overlay">
+                        <h3 id="slideshowTitle"></h3>
+                        <p id="slideshowCategory"></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Artist Info Area (1/3) -->
+            <div class="hero-artist">
+                <div class="artist-photo">
+                    <img src="IMG/artist-photo.jpg" alt="Riccardo Bovetti">
+                </div>
+                <div class="artist-intro">
+                    <h2 id="artistIntroTitle">Benvenuto</h2>
+                    <p id="artistIntroText">Pittore contemporaneo che esplora l'intersezione tra realtà e astrazione. Ogni opera è un viaggio tra forma, colore ed emozione.</p>
+                    <button class="btn-artist" onclick="loadAbout()" id="artistIntroBtn">Scopri di più</button>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <div class="main-container" id="mainContent">
         <!-- Content will be loaded here dynamically -->

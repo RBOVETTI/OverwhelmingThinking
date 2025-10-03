@@ -35,6 +35,11 @@ const translations = {
         aboutText2: "Il mio lavoro si estende su tre collezioni principali: il mondo potente e maestoso di Mucche e Tori, il regno sconfinato dell'espressione Astratta Pura, e lo spazio intrigante dell'interpretazione Semi Astratta dove la realtà incontra l'immaginazione.",
         aboutText3: "Ogni opera è creata con passione e attenzione ai dettagli, mirando a evocare emozione e contemplazione nello spettatore. Grazie per aver dedicato del tempo a esplorare il mio lavoro.",
         
+        // Hero section
+        heroWelcome: "Benvenuto",
+        heroIntro: "Pittore contemporaneo che esplora l'intersezione tra realtà e astrazione. Ogni opera è un viaggio tra forma, colore ed emozione.",
+        heroButton: "Scopri di più",
+        
         // Contact page
         contactTitle: "Contatti",
         contactText: "Interessato ad acquistare un'opera o a commissionare un pezzo? Compila il modulo qui sotto e ti risponderò il prima possibile.",
@@ -88,7 +93,12 @@ const translations = {
         contactMessage: "Message",
         contactSend: "Send Message",
         contactSuccess: "Thank you for your message! I will contact you soon.",
-        interestedIn: "I am interested in the following artworks:\n\n"
+        interestedIn: "I am interested in the following artworks:\n\n",
+        
+        // Hero section
+        heroWelcome: "Welcome",
+        heroIntro: "Contemporary painter exploring the intersection between reality and abstraction. Each artwork is a journey through form, color and emotion.",
+        heroButton: "Learn More"
     }
 };
 
@@ -103,6 +113,8 @@ let artworks = [];
 let cart = [];
 let currentCategory = 'all';
 let currentLanguage = 'it'; // Default language: Italian
+let slideshowInterval = null;
+let currentSlideIndex = 0;
 
 // ============================================
 // LOAD ARTWORK DATA FROM JSON
@@ -128,7 +140,90 @@ async function loadArtworks() {
 (async function init() {
     await loadArtworks();
     loadHome();
+    startSlideshow();
 })();
+
+// ============================================
+// SLIDESHOW FUNCTIONS
+// ============================================
+
+function startSlideshow() {
+    if (artworks.length === 0) return;
+    
+    // Show first image
+    updateSlideshow();
+    
+    // Change image every 60 seconds
+    slideshowInterval = setInterval(() => {
+        currentSlideIndex = (currentSlideIndex + 1) % artworks.length;
+        updateSlideshow();
+    }, 60000); // 60 seconds
+}
+
+function updateSlideshow() {
+    if (artworks.length === 0) return;
+    
+    const artwork = artworks[currentSlideIndex];
+    const title = typeof artwork.title === 'object' ? artwork.title[currentLanguage] : artwork.title;
+    const category = getCategoryName(artwork.category);
+    
+    const imageElement = document.getElementById('slideshowImage');
+    const titleElement = document.getElementById('slideshowTitle');
+    const categoryElement = document.getElementById('slideshowCategory');
+    
+    if (imageElement && titleElement && categoryElement) {
+        // Fade out
+        imageElement.style.opacity = '0';
+        
+        setTimeout(() => {
+            imageElement.src = artwork.image;
+            titleElement.textContent = title;
+            categoryElement.textContent = category;
+            
+            // Fade in
+            imageElement.style.opacity = '1';
+        }, 500);
+    }
+}
+
+function stopSlideshow() {
+    if (slideshowInterval) {
+        clearInterval(slideshowInterval);
+        slideshowInterval = null;
+    }
+}
+
+function showHeroSection() {
+    const heroSection = document.getElementById('heroSection');
+    if (heroSection) {
+        heroSection.classList.remove('hidden');
+        if (!slideshowInterval) {
+            startSlideshow();
+        }
+    }
+}
+
+function hideHeroSection() {
+    const heroSection = document.getElementById('heroSection');
+    if (heroSection) {
+        heroSection.classList.add('hidden');
+        stopSlideshow();
+    }
+}
+
+function updateHeroLanguage() {
+    const t = translations[currentLanguage];
+    const titleElement = document.getElementById('artistIntroTitle');
+    const textElement = document.getElementById('artistIntroText');
+    const buttonElement = document.getElementById('artistIntroBtn');
+    
+    if (titleElement) titleElement.textContent = t.heroWelcome;
+    if (textElement) textElement.textContent = t.heroIntro;
+    if (buttonElement) buttonElement.textContent = t.heroButton;
+    
+    // Update slideshow text
+    updateSlideshow();
+}
 
 // ============================================
 // LANGUAGE FUNCTIONS
@@ -148,6 +243,9 @@ function changeLanguage(lang) {
     
     // Update cart
     updateCartLanguage();
+    
+    // Update hero section
+    updateHeroLanguage();
     
     // Reload current page content
     const mainContent = document.getElementById('mainContent');
@@ -213,6 +311,10 @@ function getCategoryName(category) {
 function loadHome() {
     currentCategory = 'all';
     const t = translations[currentLanguage];
+    
+    // Show hero section
+    showHeroSection();
+    
     const content = `
         <div class="category-filter">
             <button class="category-btn active" onclick="filterCategory('all')">${t.allArtworks}</button>
@@ -229,6 +331,10 @@ function loadHome() {
 
 function loadAbout() {
     const t = translations[currentLanguage];
+    
+    // Hide hero section
+    hideHeroSection();
+    
     const content = `
         <div class="page-content">
             <h1>${t.aboutTitle}</h1>
@@ -242,6 +348,10 @@ function loadAbout() {
 
 function loadContact() {
     const t = translations[currentLanguage];
+    
+    // Hide hero section
+    hideHeroSection();
+    
     const cartItems = cart.map(item => {
         const title = typeof item.title === 'object' ? item.title[currentLanguage] : item.title;
         return `${title} (€${item.price})`;
@@ -279,6 +389,9 @@ function loadDetail(id) {
     const t = translations[currentLanguage];
     const title = typeof artwork.title === 'object' ? artwork.title[currentLanguage] : artwork.title;
     const description = typeof artwork.description === 'object' ? artwork.description[currentLanguage] : artwork.description;
+    
+    // Hide hero section
+    hideHeroSection();
     
     const content = `
         <div class="detail-view">
