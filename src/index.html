@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Riccardo Bovetti Painter</title>
+    <title>Art Portfolio & Gallery</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,9 +11,13 @@
         <div class="header-content">
             <div class="logo" onclick="loadHome()">ART GALLERY</div>
             <nav>
-                <a onclick="loadHome()">Home</a>
-                <a onclick="loadAbout()">About</a>
-                <a onclick="loadContact()">Contact</a>
+                <a onclick="loadHome()" id="nav-home">Home</a>
+                <a onclick="loadAbout()" id="nav-about">Chi Sono</a>
+                <a onclick="loadContact()" id="nav-contact">Contatti</a>
+                <div class="language-switcher">
+                    <button class="lang-btn active" onclick="changeLanguage('it')">IT</button>
+                    <button class="lang-btn" onclick="changeLanguage('en')">EN</button>
+                </div>
                 <div class="cart-icon" onclick="toggleCart()">
                     🛒
                     <span class="cart-count" id="cartCount">0</span>
@@ -29,7 +33,7 @@
     <!-- Cart Sidebar -->
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
-            <h2>Shopping Cart</h2>
+            <h2 id="cart-title">Carrello</h2>
             <span class="close-cart" onclick="toggleCart()">✕</span>
         </div>
         <div class="cart-items" id="cartItems">
@@ -37,10 +41,10 @@
         </div>
         <div class="cart-footer">
             <div class="cart-total">
-                <span>Total:</span>
+                <span id="cart-total-label">Totale:</span>
                 <span id="cartTotal">€0</span>
             </div>
-            <button class="btn-primary" onclick="contactForPurchase()" style="width: 100%;">Contact for Purchase</button>
+            <button class="btn-primary" onclick="contactForPurchase()" id="cart-contact-btn" style="width: 100%;">Contatta per l'Acquisto</button>
         </div>
     </div>
 

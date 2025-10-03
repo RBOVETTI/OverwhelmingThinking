@@ -64,6 +64,35 @@ nav a:hover {
     color: var(--primary-blue);
 }
 
+.language-switcher {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: 1rem;
+}
+
+.lang-btn {
+    padding: 0.5rem 0.75rem;
+    background-color: transparent;
+    border: 2px solid var(--border-gray);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text-gray);
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.lang-btn:hover {
+    border-color: var(--primary-blue);
+    color: var(--primary-blue);
+}
+
+.lang-btn.active {
+    background-color: var(--primary-blue);
+    color: white;
+    border-color: var(--primary-blue);
+}
+
 .cart-icon {
     position: relative;
     cursor: pointer;
