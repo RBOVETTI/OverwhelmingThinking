@@ -71,26 +71,24 @@ nav a:hover {
 }
 
 .lang-btn {
-    padding: 0.5rem 0.75rem;
+    padding: 0.5rem;
     background-color: transparent;
     border: 2px solid var(--border-gray);
     border-radius: 6px;
     cursor: pointer;
-    font-size: 0.9rem;
-    color: var(--text-gray);
-    font-weight: 600;
+    font-size: 1.5rem;
     transition: all 0.3s;
+    line-height: 1;
 }
 
 .lang-btn:hover {
     border-color: var(--primary-blue);
-    color: var(--primary-blue);
+    transform: scale(1.1);
 }
 
 .lang-btn.active {
-    background-color: var(--primary-blue);
-    color: white;
     border-color: var(--primary-blue);
+    box-shadow: 0 0 0 2px var(--primary-blue);
 }
 
 .cart-icon {

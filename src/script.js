@@ -93,130 +93,9 @@ const translations = {
 };
 
 // ============================================
-// ARTWORK DATA - Edit this section to add/modify your artworks
+// ARTWORK DATA - Will be loaded from Paintings.json
 // ============================================
-const artworks = [
-    {
-        id: 1,
-        title: {
-            it: "Toro in Movimento",
-            en: "Bull in Motion"
-        },
-        category: "Cows and Bulls",
-        price: 1200,
-        dimensions: "100x70cm",
-        description: {
-            it: "Una rappresentazione dinamica di un toro in pieno movimento, catturando la potenza grezza e l'energia di questo magnifico animale.",
-            en: "A dynamic representation of a bull in full motion, capturing the raw power and energy of this magnificent animal."
-        },
-        image: "IMG/bull-motion.jpg"
-    },
-    {
-        id: 2,
-        title: {
-            it: "Mucca Pacifica",
-            en: "Peaceful Cow"
-        },
-        category: "Cows and Bulls",
-        price: 950,
-        dimensions: "80x60cm",
-        description: {
-            it: "Un ritratto sereno di una mucca in un ambiente pastorale, enfatizzando la natura pacifica di queste creature gentili.",
-            en: "A serene portrait of a cow in a pastoral setting, emphasizing the peaceful nature of these gentle creatures."
-        },
-        image: "IMG/peaceful-cow.jpg"
-    },
-    {
-        id: 3,
-        title: {
-            it: "Ritmo Astratto",
-            en: "Abstract Rhythm"
-        },
-        category: "Pure Abstract",
-        price: 1500,
-        dimensions: "120x90cm",
-        description: {
-            it: "Un'esplorazione di colore, forma e movimento attraverso un'espressione puramente astratta. Quest'opera invita gli spettatori a trovare il proprio significato.",
-            en: "An exploration of color, form, and movement through purely abstract expression. This piece invites viewers to find their own meaning."
-        },
-        image: "IMG/abstract-rhythm.jpg"
-    },
-    {
-        id: 4,
-        title: {
-            it: "Sinfonia di Colori",
-            en: "Color Symphony"
-        },
-        category: "Pure Abstract",
-        price: 1350,
-        dimensions: "100x100cm",
-        description: {
-            it: "Una vibrante celebrazione di colore e texture, quest'opera astratta crea una sinfonia visiva sulla tela.",
-            en: "A vibrant celebration of color and texture, this abstract work creates a visual symphony on canvas."
-        },
-        image: "IMG/color-symphony.jpg"
-    },
-    {
-        id: 5,
-        title: {
-            it: "Sogni Urbani",
-            en: "Urban Dreams"
-        },
-        category: "Semi Abstract",
-        price: 1100,
-        dimensions: "90x70cm",
-        description: {
-            it: "Un'interpretazione semi-astratta di paesaggi urbani, mescolando forme riconoscibili con elementi astratti.",
-            en: "A semi-abstract interpretation of urban landscapes, blending recognizable forms with abstract elements."
-        },
-        image: "IMG/urban-dreams.jpg"
-    },
-    {
-        id: 6,
-        title: {
-            it: "Sussurro della Natura",
-            en: "Nature's Whisper"
-        },
-        category: "Semi Abstract",
-        price: 1250,
-        dimensions: "110x80cm",
-        description: {
-            it: "Le forme naturali si dissolvono in schemi astratti in questo pezzo contemplativo sul rapporto tra realtà e immaginazione.",
-            en: "Natural forms dissolve into abstract patterns in this contemplative piece about the relationship between reality and imagination."
-        },
-        image: "IMG/nature-whisper.jpg"
-    },
-    {
-        id: 7,
-        title: {
-            it: "Toro delle Highland",
-            en: "Highland Bull"
-        },
-        category: "Cows and Bulls",
-        price: 1400,
-        dimensions: "100x80cm",
-        description: {
-            it: "Un maestoso toro delle highland ritratto con pennellate audaci e illuminazione drammatica.",
-            en: "A majestic highland bull portrayed with bold brushstrokes and dramatic lighting."
-        },
-        image: "IMG/highland-bull.jpg"
-    },
-    {
-        id: 8,
-        title: {
-            it: "Flusso Cosmico",
-            en: "Cosmic Flow"
-        },
-        category: "Pure Abstract",
-        price: 1600,
-        dimensions: "130x100cm",
-        description: {
-            it: "Un'esplorazione dello spazio e dell'energia attraverso forme astratte e palette di colori cosmici.",
-            en: "An exploration of space and energy through abstract forms and cosmic color palettes."
-        },
-        image: "IMG/cosmic-flow.jpg"
-    }
-];
+let artworks = [];
 
 // ============================================
 // GLOBAL VARIABLES
@@ -226,10 +105,30 @@ let currentCategory = 'all';
 let currentLanguage = 'it'; // Default language: Italian
 
 // ============================================
+// LOAD ARTWORK DATA FROM JSON
+// ============================================
+async function loadArtworks() {
+    try {
+        const response = await fetch('Paintings.json');
+        if (!response.ok) {
+            throw new Error('Impossibile caricare i dipinti');
+        }
+        artworks = await response.json();
+        console.log('Dipinti caricati con successo:', artworks.length);
+    } catch (error) {
+        console.error('Errore nel caricamento dei dipinti:', error);
+        alert('Errore nel caricamento delle opere. Verifica che il file Paintings.json sia presente.');
+    }
+}
+
+// ============================================
 // INITIALIZATION
 // ============================================
-// Load home page when the website starts
-loadHome();
+// Load artworks and then initialize the page
+(async function init() {
+    await loadArtworks();
+    loadHome();
+})();
 
 // ============================================
 // LANGUAGE FUNCTIONS
