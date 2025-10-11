@@ -387,16 +387,27 @@ nav a:hover {
     margin-bottom: 1.5rem;
 }
 
-.detail-info .description {
-    color: var(--text-gray);
-    margin-bottom: 1.5rem;
-    line-height: 1.8;
-}
-
+.detail-info .publication-date,
+.detail-info .technique,
 .detail-info .dimensions {
     color: var(--text-gray);
-    margin-bottom: 2rem;
-    font-style: italic;
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.detail-info .publication-date strong,
+.detail-info .technique strong,
+.detail-info .dimensions strong {
+    color: var(--dark-gray);
+    font-weight: 600;
+}
+
+.detail-info .description {
+    color: var(--text-gray);
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+    font-size: 1rem;
 }
 
 .detail-info .price {

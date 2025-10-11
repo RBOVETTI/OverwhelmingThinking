@@ -26,6 +26,8 @@ const translations = {
         // Detail page
         backToGallery: "← Torna alla Galleria",
         dimensions: "Dimensioni:",
+        technique: "Tecnica:",
+        publicationDate: "Data:",
         addToCart: "Aggiungi al Carrello",
         contactArtist: "Contatta l'Artista",
         
@@ -75,6 +77,8 @@ const translations = {
         // Detail page
         backToGallery: "← Back to Gallery",
         dimensions: "Dimensions:",
+        technique: "Technique:",
+        publicationDate: "Date:",
         addToCart: "Add to Cart",
         contactArtist: "Contact Artist",
         
@@ -389,6 +393,18 @@ function loadDetail(id) {
     const t = translations[currentLanguage];
     const title = typeof artwork.title === 'object' ? artwork.title[currentLanguage] : artwork.title;
     const description = typeof artwork.description === 'object' ? artwork.description[currentLanguage] : artwork.description;
+    const technique = typeof artwork.technique === 'object' ? artwork.technique[currentLanguage] : artwork.technique;
+    
+    // Format date
+    let formattedDate = '';
+    if (artwork.publicationDate) {
+        const date = new Date(artwork.publicationDate);
+        formattedDate = date.toLocaleDateString(currentLanguage === 'it' ? 'it-IT' : 'en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    }
     
     // Hide hero section
     hideHeroSection();
@@ -403,8 +419,10 @@ function loadDetail(id) {
                 <div class="detail-info">
                     <h1>${title}</h1>
                     <span class="category-tag">${getCategoryName(artwork.category)}</span>
+                    ${formattedDate ? `<p class="publication-date"><strong>${t.publicationDate}</strong> ${formattedDate}</p>` : ''}
+                    <p class="technique"><strong>${t.technique}</strong> ${technique}</p>
+                    <p class="dimensions"><strong>${t.dimensions}</strong> ${artwork.dimensions}</p>
                     <p class="description">${description}</p>
-                    <p class="dimensions">${t.dimensions} ${artwork.dimensions}</p>
                     <div class="price">€${artwork.price}</div>
                     <button class="btn-primary" onclick="addToCart(${artwork.id})">${t.addToCart}</button>
                     <button class="btn-secondary" onclick="loadContact()">${t.contactArtist}</button>
