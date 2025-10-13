@@ -54,41 +54,20 @@ def parse_painting_block(lines, language):
 def convert_txt_to_json(input_file, output_file):
     """Converte il file di testo in JSON"""
     # Prova diverse codifiche
-    encodings = ['utf-8', 'latin-1', 'iso-8859-1', 'cp1252', 'mac-roman']
+    encodings = ['utf-8', 'latin-1', 'iso-8859-1', 'cp1252']
     content = None
-    used_encoding = None
     
     for encoding in encodings:
         try:
             with open(input_file, 'r', encoding=encoding) as f:
                 content = f.read()
-            used_encoding = encoding
-            print(f"📖 File letto con codifica: {encoding}")
+            print(f"File letto con codifica: {encoding}")
             break
         except UnicodeDecodeError:
             continue
     
     if content is None:
-        raise ValueError("Impossibile leggere il file. Nessuna codifica supportata ha funzionato.")
-    
-    # Pulizia caratteri problematici
-    replacements = {
-        'Ò': '"',  # Virgoletta aperta storta
-        'Ó': '"',  # Virgoletta chiusa storta
-        'È': 'È',  # E con accento
-        ''': "'",  # Apostrofo curvo
-        ''': "'",  # Apostrofo curvo alternativo
-        '"': '"',  # Virgoletta doppia curva aperta
-        '"': '"',  # Virgoletta doppia curva chiusa
-        '–': '-',  # En dash
-        '—': '-',  # Em dash
-        '…': '...',  # Ellipsis
-    }
-    
-    for old, new in replacements.items():
-        content = content.replace(old, new)
-    
-    print(f"🧹 Caratteri speciali puliti")
+        raise ValueError("Impossibile leggere il file.")
     
     # Dividi il contenuto per i blocchi di dipinti (separati da ---)
     blocks = content.split('---')
@@ -140,7 +119,7 @@ def convert_txt_to_json(input_file, output_file):
     with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(paintings_list, f, ensure_ascii=False, indent=4)
     
-    print(f"✅ Conversione completata! {len(paintings_list)} dipinti salvati in {output_file}")
+    print(f"Conversione completata! {len(paintings_list)} dipinti salvati in {output_file}")
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
@@ -155,5 +134,5 @@ if __name__ == '__main__':
     try:
         convert_txt_to_json(input_file, output_file)
     except Exception as e:
-        print(f"❌ Errore durante la conversione: {e}")
+        print(f"Errore durante la conversione: {e}")
         sys.exit(1)
