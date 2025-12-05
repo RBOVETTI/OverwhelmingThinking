@@ -1,4 +1,0 @@
-# ignora cartelle comuni che potresti aggiungere in futuro
-node_modules
-dist
-build
