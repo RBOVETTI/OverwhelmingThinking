@@ -119,6 +119,28 @@ let currentCategory = 'all';
 let currentLanguage = 'it'; // Default language: Italian
 let slideshowInterval = null;
 let currentSlideIndex = 0;
+let currentView = 'home';
+let currentArtworkId = null;
+
+const dom = {
+    navHome: document.getElementById('nav-home'),
+    navAbout: document.getElementById('nav-about'),
+    navContact: document.getElementById('nav-contact'),
+    cartTitle: document.getElementById('cart-title'),
+    cartTotalLabel: document.getElementById('cart-total-label'),
+    cartContactBtn: document.getElementById('cart-contact-btn'),
+    cartItems: document.getElementById('cartItems'),
+    cartTotal: document.getElementById('cartTotal'),
+    cartCount: document.getElementById('cartCount'),
+    mainContent: document.getElementById('mainContent'),
+    heroSection: document.getElementById('heroSection'),
+    slideshowImage: document.getElementById('slideshowImage'),
+    slideshowTitle: document.getElementById('slideshowTitle'),
+    slideshowCategory: document.getElementById('slideshowCategory'),
+    artistIntroTitle: document.getElementById('artistIntroTitle'),
+    artistIntroText: document.getElementById('artistIntroText'),
+    artistIntroBtn: document.getElementById('artistIntroBtn')
+};
 
 // ============================================
 // LOAD ARTWORK DATA FROM JSON
@@ -171,21 +193,17 @@ function updateSlideshow() {
     const title = typeof artwork.title === 'object' ? artwork.title[currentLanguage] : artwork.title;
     const category = getCategoryName(artwork.category);
     
-    const imageElement = document.getElementById('slideshowImage');
-    const titleElement = document.getElementById('slideshowTitle');
-    const categoryElement = document.getElementById('slideshowCategory');
-    
-    if (imageElement && titleElement && categoryElement) {
+    if (dom.slideshowImage && dom.slideshowTitle && dom.slideshowCategory) {
         // Fade out
-        imageElement.style.opacity = '0';
+        dom.slideshowImage.style.opacity = '0';
         
         setTimeout(() => {
-            imageElement.src = artwork.image;
-            titleElement.textContent = title;
-            categoryElement.textContent = category;
+            dom.slideshowImage.src = artwork.image;
+            dom.slideshowTitle.textContent = title;
+            dom.slideshowCategory.textContent = category;
             
             // Fade in
-            imageElement.style.opacity = '1';
+            dom.slideshowImage.style.opacity = '1';
         }, 500);
     }
 }
@@ -198,9 +216,8 @@ function stopSlideshow() {
 }
 
 function showHeroSection() {
-    const heroSection = document.getElementById('heroSection');
-    if (heroSection) {
-        heroSection.classList.remove('hidden');
+    if (dom.heroSection) {
+        dom.heroSection.classList.remove('hidden');
         if (!slideshowInterval) {
             startSlideshow();
         }
@@ -208,22 +225,17 @@ function showHeroSection() {
 }
 
 function hideHeroSection() {
-    const heroSection = document.getElementById('heroSection');
-    if (heroSection) {
-        heroSection.classList.add('hidden');
+    if (dom.heroSection) {
+        dom.heroSection.classList.add('hidden');
         stopSlideshow();
     }
 }
 
 function updateHeroLanguage() {
     const t = translations[currentLanguage];
-    const titleElement = document.getElementById('artistIntroTitle');
-    const textElement = document.getElementById('artistIntroText');
-    const buttonElement = document.getElementById('artistIntroBtn');
-    
-    if (titleElement) titleElement.textContent = t.heroWelcome;
-    if (textElement) textElement.textContent = t.heroIntro;
-    if (buttonElement) buttonElement.textContent = t.heroButton;
+    if (dom.artistIntroTitle) dom.artistIntroTitle.textContent = t.heroWelcome;
+    if (dom.artistIntroText) dom.artistIntroText.textContent = t.heroIntro;
+    if (dom.artistIntroBtn) dom.artistIntroBtn.textContent = t.heroButton;
     
     // Update slideshow text
     updateSlideshow();
@@ -233,14 +245,14 @@ function updateHeroLanguage() {
 // LANGUAGE FUNCTIONS
 // ============================================
 
-function changeLanguage(lang) {
+function changeLanguage(lang, event) {
     currentLanguage = lang;
     
     // Update language buttons
     document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.classList.remove('active');
     });
-    event.target.classList.add('active');
+    event?.target?.classList.add('active');
     
     // Update navigation
     updateNavigation();
@@ -252,49 +264,37 @@ function changeLanguage(lang) {
     updateHeroLanguage();
     
     // Reload current page content
-    const mainContent = document.getElementById('mainContent');
-    if (mainContent.querySelector('.gallery-grid')) {
+    if (currentView === 'home') {
         loadHome();
-    } else if (mainContent.querySelector('.page-content h1')?.textContent.includes('Chi Sono') || 
-               mainContent.querySelector('.page-content h1')?.textContent.includes('About')) {
+    } else if (currentView === 'about') {
         loadAbout();
-    } else if (mainContent.querySelector('.contact-form')) {
+    } else if (currentView === 'contact') {
         loadContact();
-    } else if (mainContent.querySelector('.detail-view')) {
-        // If on detail page, find the artwork ID and reload
-        const backBtn = mainContent.querySelector('.btn-secondary');
-        if (backBtn) {
-            // Try to find artwork ID from the page
-            const priceElement = mainContent.querySelector('.price');
-            if (priceElement) {
-                const price = parseInt(priceElement.textContent.replace('€', ''));
-                const artwork = artworks.find(art => art.price === price);
-                if (artwork) {
-                    loadDetail(artwork.id);
-                }
-            }
-        }
+    } else if (currentView === 'detail' && currentArtworkId !== null) {
+        loadDetail(currentArtworkId);
     }
 }
 
 function updateNavigation() {
     const t = translations[currentLanguage];
-    document.getElementById('nav-home').textContent = t.navHome;
-    document.getElementById('nav-about').textContent = t.navAbout;
-    document.getElementById('nav-contact').textContent = t.navContact;
+    if (dom.navHome) dom.navHome.textContent = t.navHome;
+    if (dom.navAbout) dom.navAbout.textContent = t.navAbout;
+    if (dom.navContact) dom.navContact.textContent = t.navContact;
 }
 
 function updateCartLanguage() {
     const t = translations[currentLanguage];
-    document.getElementById('cart-title').textContent = t.cartTitle;
-    document.getElementById('cart-total-label').textContent = t.cartTotal;
-    document.getElementById('cart-contact-btn').textContent = t.cartContactBtn;
+    if (dom.cartTitle) dom.cartTitle.textContent = t.cartTitle;
+    if (dom.cartTotalLabel) dom.cartTotalLabel.textContent = t.cartTotal;
+    if (dom.cartContactBtn) dom.cartContactBtn.textContent = t.cartContactBtn;
     
     // Update cart items if any
     if (cart.length > 0) {
         updateCart();
     } else {
-        document.getElementById('cartItems').innerHTML = `<div class="empty-cart">${t.cartEmpty}</div>`;
+        if (dom.cartItems) {
+            dom.cartItems.innerHTML = `<div class="empty-cart">${t.cartEmpty}</div>`;
+        }
     }
 }
 
@@ -313,6 +313,7 @@ function getCategoryName(category) {
 // ============================================
 
 function loadHome() {
+    currentView = 'home';
     currentCategory = 'all';
     const t = translations[currentLanguage];
     
@@ -321,19 +322,22 @@ function loadHome() {
     
     const content = `
         <div class="category-filter">
-            <button class="category-btn active" onclick="filterCategory('all')">${t.allArtworks}</button>
-            <button class="category-btn" onclick="filterCategory('Cows and Bulls')">${t.cowsBulls}</button>
-            <button class="category-btn" onclick="filterCategory('Pure Abstract')">${t.pureAbstract}</button>
-            <button class="category-btn" onclick="filterCategory('Semi Abstract')">${t.semiAbstract}</button>
+            <button class="category-btn active" onclick="filterCategory('all', event)">${t.allArtworks}</button>
+            <button class="category-btn" onclick="filterCategory('Cows and Bulls', event)">${t.cowsBulls}</button>
+            <button class="category-btn" onclick="filterCategory('Pure Abstract', event)">${t.pureAbstract}</button>
+            <button class="category-btn" onclick="filterCategory('Semi Abstract', event)">${t.semiAbstract}</button>
         </div>
         <div class="gallery-grid" id="galleryGrid">
             ${renderGallery()}
         </div>
     `;
-    document.getElementById('mainContent').innerHTML = content;
+    if (dom.mainContent) {
+        dom.mainContent.innerHTML = content;
+    }
 }
 
 function loadAbout() {
+    currentView = 'about';
     const t = translations[currentLanguage];
     
     // Hide hero section
@@ -347,10 +351,13 @@ function loadAbout() {
             <p>${t.aboutText3}</p>
         </div>
     `;
-    document.getElementById('mainContent').innerHTML = content;
+    if (dom.mainContent) {
+        dom.mainContent.innerHTML = content;
+    }
 }
 
 function loadContact() {
+    currentView = 'contact';
     const t = translations[currentLanguage];
     
     // Hide hero section
@@ -385,10 +392,14 @@ function loadContact() {
             </form>
         </div>
     `;
-    document.getElementById('mainContent').innerHTML = content;
+    if (dom.mainContent) {
+        dom.mainContent.innerHTML = content;
+    }
 }
 
 function loadDetail(id) {
+    currentView = 'detail';
+    currentArtworkId = id;
     const artwork = artworks.find(art => art.id === id);
     const t = translations[currentLanguage];
     const title = typeof artwork.title === 'object' ? artwork.title[currentLanguage] : artwork.title;
@@ -430,7 +441,9 @@ function loadDetail(id) {
             </div>
         </div>
     `;
-    document.getElementById('mainContent').innerHTML = content;
+    if (dom.mainContent) {
+        dom.mainContent.innerHTML = content;
+    }
 }
 
 // ============================================
@@ -446,7 +459,7 @@ function renderGallery() {
         const title = typeof art.title === 'object' ? art.title[currentLanguage] : art.title;
         return `
             <div class="artwork-card" onclick="loadDetail(${art.id})">
-                <img src="${art.image}" alt="${title}" class="artwork-image">
+                <img src="${art.image}" alt="${title}" class="artwork-image" loading="lazy">
                 <div class="artwork-info">
                     <div class="artwork-title">${title}</div>
                     <div class="artwork-category">${getCategoryName(art.category)}</div>
@@ -457,13 +470,16 @@ function renderGallery() {
     }).join('');
 }
 
-function filterCategory(category) {
+function filterCategory(category, event) {
     currentCategory = category;
     document.querySelectorAll('.category-btn').forEach(btn => {
         btn.classList.remove('active');
     });
-    event.target.classList.add('active');
-    document.getElementById('galleryGrid').innerHTML = renderGallery();
+    event?.target?.classList.add('active');
+    const grid = document.getElementById('galleryGrid');
+    if (grid) {
+        grid.innerHTML = renderGallery();
+    }
 }
 
 // ============================================
@@ -489,14 +505,21 @@ function removeFromCart(id) {
 
 function updateCart() {
     const t = translations[currentLanguage];
-    document.getElementById('cartCount').textContent = cart.length;
+    if (dom.cartCount) {
+        dom.cartCount.textContent = cart.length;
+    }
     
     if (cart.length === 0) {
-        document.getElementById('cartItems').innerHTML = `<div class="empty-cart">${t.cartEmpty}</div>`;
-        document.getElementById('cartTotal').textContent = '€0';
+        if (dom.cartItems) {
+            dom.cartItems.innerHTML = `<div class="empty-cart">${t.cartEmpty}</div>`;
+        }
+        if (dom.cartTotal) {
+            dom.cartTotal.textContent = '€0';
+        }
     } else {
         const total = cart.reduce((sum, item) => sum + item.price, 0);
-        document.getElementById('cartItems').innerHTML = cart.map(item => {
+        if (dom.cartItems) {
+            dom.cartItems.innerHTML = cart.map(item => {
             const title = typeof item.title === 'object' ? item.title[currentLanguage] : item.title;
             return `
                 <div class="cart-item">
@@ -509,7 +532,10 @@ function updateCart() {
                 </div>
             `;
         }).join('');
-        document.getElementById('cartTotal').textContent = `€${total}`;
+        }
+        if (dom.cartTotal) {
+            dom.cartTotal.textContent = `€${total}`;
+        }
     }
 }
 
