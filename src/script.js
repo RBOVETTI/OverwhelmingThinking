@@ -13,6 +13,7 @@ const translations = {
         cowsBulls: "Mucche e Tori",
         pureAbstract: "Astratto Puro",
         semiAbstract: "Semi Astratto",
+        photos: "Fotografie",
         
         // Cart
         cartTitle: "Carrello",
@@ -64,6 +65,7 @@ const translations = {
         cowsBulls: "Cows and Bulls",
         pureAbstract: "Pure Abstract",
         semiAbstract: "Semi Abstract",
+        photos: "Photos",
         
         // Cart
         cartTitle: "Shopping Cart",
@@ -303,7 +305,8 @@ function getCategoryName(category) {
     const categoryMap = {
         'Cows and Bulls': t.cowsBulls,
         'Pure Abstract': t.pureAbstract,
-        'Semi Abstract': t.semiAbstract
+        'Semi Abstract': t.semiAbstract,
+        'Photos': t.photos
     };
     return categoryMap[category] || category;
 }
@@ -326,6 +329,7 @@ function loadHome() {
             <button class="category-btn" onclick="filterCategory('Cows and Bulls', event)">${t.cowsBulls}</button>
             <button class="category-btn" onclick="filterCategory('Pure Abstract', event)">${t.pureAbstract}</button>
             <button class="category-btn" onclick="filterCategory('Semi Abstract', event)">${t.semiAbstract}</button>
+            <button class="category-btn" onclick="filterCategory('Photos', event)">${t.photos}</button>
         </div>
         <div class="gallery-grid" id="galleryGrid">
             ${renderGallery()}
