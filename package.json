@@ -1,0 +1,11 @@
+{
+  "name": "overwhelmingthinking-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install": "cd react-app && npm install",
+    "build": "cd react-app && npm install && npm run build",
+    "dev": "cd react-app && npm run dev",
+    "preview": "cd react-app && npm run preview"
+  }
+}
