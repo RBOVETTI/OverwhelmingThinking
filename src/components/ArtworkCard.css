@@ -27,12 +27,12 @@
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   transition: transform 0.5s;
 }
 
 .artwork-card:hover .artwork-image {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .artwork-overlay {
