@@ -1,8 +1,7 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "react-app/dist",
-  "installCommand": "echo 'Skipping root install'",
   "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
   "rewrites": [
     {
       "source": "/(.*)",
