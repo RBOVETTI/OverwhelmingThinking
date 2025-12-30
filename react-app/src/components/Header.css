@@ -1,0 +1,270 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Top banner */
+.header-banner {
+  background: linear-gradient(135deg, #FF9A8B 0%, #FF6A88 50%, #FF99AC 100%);
+  color: white;
+  text-align: center;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/* Main header */
+.header-main {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 16px 0;
+}
+
+.header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+/* Logo */
+.logo {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a1a1a;
+  text-decoration: none;
+  white-space: nowrap;
+  letter-spacing: -0.5px;
+}
+
+.logo:hover {
+  color: #FF6A88;
+}
+
+/* Main navigation */
+.main-nav {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+
+.nav-link {
+  color: #1a1a1a;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: #FF6A88;
+}
+
+/* Header right section */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Search box */
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  color: #999;
+  pointer-events: none;
+}
+
+.search-input {
+  padding: 10px 16px 10px 40px;
+  border: 1px solid #e0e0e0;
+  border-radius: 24px;
+  font-size: 14px;
+  width: 280px;
+  transition: all 0.3s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #FF6A88;
+  box-shadow: 0 0 0 3px rgba(255, 106, 136, 0.1);
+}
+
+.search-input::placeholder {
+  color: #999;
+}
+
+/* Language switcher */
+.language-switcher {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lang-btn {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.2s;
+}
+
+.lang-btn:hover {
+  color: #1a1a1a;
+}
+
+.lang-btn.active {
+  color: #FF6A88;
+  font-weight: 600;
+}
+
+.lang-divider {
+  color: #ddd;
+  font-size: 12px;
+}
+
+/* Icon buttons */
+.icon-btn {
+  background: none;
+  border: none;
+  color: #1a1a1a;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.icon-btn:hover {
+  background: #f5f5f5;
+  color: #FF6A88;
+}
+
+.cart-btn {
+  position: relative;
+}
+
+.cart-count {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: #FF6A88;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+/* Category navigation */
+.header-categories {
+  background: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 14px 0;
+}
+
+.category-nav {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  overflow-x: auto;
+}
+
+.category-link {
+  color: #666;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: color 0.2s;
+  padding: 4px 0;
+  border-bottom: 2px solid transparent;
+}
+
+.category-link:hover {
+  color: #1a1a1a;
+  border-bottom-color: #FF6A88;
+}
+
+.category-link.special {
+  color: #6366f1;
+  font-weight: 600;
+}
+
+.category-link.special:hover {
+  color: #4f46e5;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .header-container {
+    padding: 0 20px;
+    gap: 20px;
+  }
+
+  .search-input {
+    width: 200px;
+  }
+
+  .main-nav {
+    gap: 20px;
+  }
+
+  .category-nav {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-banner {
+    font-size: 12px;
+    padding: 8px 16px;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .main-nav {
+    display: none;
+  }
+
+  .search-box {
+    display: none;
+  }
+
+  .header-right {
+    gap: 12px;
+  }
+
+  .category-nav {
+    gap: 16px;
+    padding: 0 20px;
+  }
+
+  .category-link {
+    font-size: 13px;
+  }
+}
