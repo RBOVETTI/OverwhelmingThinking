@@ -3,7 +3,7 @@
 }
 
 .about-hero {
-  background: linear-gradient(135deg, #FF9A8B 0%, #FF6A88 50%, #FF99AC 100%);
+  background: var(--primary-gradient);
   padding: 80px 40px;
   text-align: center;
   color: white;
