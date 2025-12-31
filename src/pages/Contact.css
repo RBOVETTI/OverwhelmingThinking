@@ -4,7 +4,7 @@
 }
 
 .contact-hero {
-  background: linear-gradient(135deg, #FF9A8B 0%, #FF6A88 50%, #FF99AC 100%);
+  background: var(--primary-gradient);
   padding: 80px 40px;
   text-align: center;
   color: white;
@@ -73,14 +73,14 @@
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #FF6A88;
-  box-shadow: 0 0 0 3px rgba(255, 106, 136, 0.1);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(184, 149, 106, 0.1);
 }
 
 .submit-btn {
   width: 100%;
   padding: 16px 32px;
-  background: linear-gradient(135deg, #FF9A8B 0%, #FF6A88 50%, #FF99AC 100%);
+  background: var(--primary-gradient);
   color: white;
   border: none;
   border-radius: 8px;
@@ -92,7 +92,7 @@
 
 .submit-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(255, 106, 136, 0.4);
+  box-shadow: 0 8px 24px rgba(184, 149, 106, 0.4);
 }
 
 .submit-btn:active {

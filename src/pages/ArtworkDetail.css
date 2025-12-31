@@ -121,7 +121,7 @@
 .price-tag {
   font-size: 36px;
   font-weight: 700;
-  color: #FF6A88;
+  color: var(--primary-color);
 }
 
 .sold-tag {
@@ -150,13 +150,13 @@
 }
 
 .btn-primary.btn-large {
-  background: linear-gradient(135deg, #FF9A8B 0%, #FF6A88 50%, #FF99AC 100%);
+  background: var(--primary-gradient);
   color: white;
 }
 
 .btn-primary.btn-large:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(255, 106, 136, 0.4);
+  box-shadow: 0 8px 24px rgba(184, 149, 106, 0.4);
 }
 
 .btn-secondary.btn-large {
@@ -166,8 +166,8 @@
 }
 
 .btn-secondary.btn-large:hover {
-  border-color: #FF6A88;
-  color: #FF6A88;
+  border-color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 /* Responsive */

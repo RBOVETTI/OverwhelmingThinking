@@ -142,7 +142,7 @@
 .cart-item-price {
   font-size: 18px;
   font-weight: 600;
-  color: #FF6A88;
+  color: var(--primary-color);
   margin: 0 0 12px 0;
 }
 
@@ -182,13 +182,13 @@
 
 .total-amount {
   font-size: 24px;
-  color: #FF6A88;
+  color: var(--primary-color);
 }
 
 .contact-btn {
   width: 100%;
   padding: 16px;
-  background: linear-gradient(135deg, #FF9A8B 0%, #FF6A88 50%, #FF99AC 100%);
+  background: var(--primary-gradient);
   color: white;
   border: none;
   border-radius: 8px;
@@ -200,7 +200,7 @@
 
 .contact-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 106, 136, 0.3);
+  box-shadow: 0 6px 20px rgba(184, 149, 106, 0.3);
 }
 
 .contact-btn:active {

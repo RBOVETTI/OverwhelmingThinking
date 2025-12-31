@@ -110,26 +110,26 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #FF9A8B 0%, #FF6A88 50%, #FF99AC 100%);
+  background: var(--primary-gradient);
   color: white;
   border: 2px solid transparent;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(255, 106, 136, 0.4);
+  box-shadow: 0 8px 24px rgba(184, 149, 106, 0.4);
 }
 
 .btn-secondary {
   background: rgba(255, 255, 255, 0.1);
   color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(10px);
 }
 
 .btn-secondary:hover {
   background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.5);
+  border-color: rgba(255, 255, 255, 0.6);
 }
 
 .hero-indicators {
