@@ -9,11 +9,14 @@ i18n
       it: { translation: translations.it },
       en: { translation: translations.en }
     },
-    lng: 'it', // default language
+    lng: 'it', // default language - always Italian
     fallbackLng: 'it',
     interpolation: {
       escapeValue: false
     }
   });
+
+// Force Italian on initialization (override any browser preferences)
+i18n.changeLanguage('it');
 
 export default i18n;
