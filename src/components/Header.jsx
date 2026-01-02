@@ -13,10 +13,6 @@ const Header = () => {
   const activeCategory = searchParams.get('category') || 'all';
   const isHomePage = location.pathname === '/';
 
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
-  };
-
   return (
     <header className="header">
       {/* Top banner */}
@@ -41,18 +37,20 @@ const Header = () => {
 
           {/* Right section */}
           <div className="header-right">
-            {/* Language switcher */}
+            {/* Language switcher - DISABLED temporarily */}
             <div className="language-switcher">
               <button
-                className={`lang-btn ${i18n.language === 'it' ? 'active' : ''}`}
-                onClick={() => changeLanguage('it')}
+                className="lang-btn active"
+                disabled
+                style={{ cursor: 'default' }}
               >
                 IT
               </button>
               <span className="lang-divider">|</span>
               <button
-                className={`lang-btn ${i18n.language === 'en' ? 'active' : ''}`}
-                onClick={() => changeLanguage('en')}
+                className="lang-btn"
+                disabled
+                style={{ cursor: 'default', opacity: 0.5 }}
               >
                 EN
               </button>
