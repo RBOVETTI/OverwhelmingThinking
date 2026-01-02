@@ -79,6 +79,14 @@
         font-size: 13px;
         color: #333;
       }
+      .table-wrapper {
+        max-height: 420px;
+        overflow: auto;
+        border: 1px solid #ddd;
+      }
+      .table-wrapper table {
+        margin-top: 0;
+      }
     </style>
   </head>
   <body>
@@ -157,18 +165,20 @@
       </div>
     </fieldset>
 
-    <table id="dataTable">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Titolo (IT)</th>
-          <th>Categoria</th>
-          <th>Prezzo</th>
-          <th>Azioni</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <div class="table-wrapper">
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Titolo (IT)</th>
+            <th>Categoria</th>
+            <th>Prezzo</th>
+            <th>Azioni</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
 
     <script>
       const fileInput = document.getElementById('fileInput');
@@ -251,7 +261,12 @@
         image: fields.image.value.trim()
       });
 
+      const sortPaintingsById = () => {
+        paintings.sort((a, b) => (a?.id || 0) - (b?.id || 0));
+      };
+
       const renderTable = () => {
+        sortPaintingsById();
         tableBody.innerHTML = '';
         paintings.forEach((painting, index) => {
           const row = document.createElement('tr');
@@ -336,6 +351,19 @@
         setStatus('Nuovo record.');
       });
 
+      const downloadJson = () => {
+        const blob = new Blob([JSON.stringify(paintings, null, 2)], {
+          type: 'application/json'
+        });
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = 'Paintings.json';
+        anchor.click();
+        URL.revokeObjectURL(url);
+        setStatus('Download avviato.');
+      };
+
       saveBtn.addEventListener('click', () => {
         const candidate = buildPaintingFromForm();
         const validatedId = ensureUniqueId(candidate.id);
@@ -350,8 +378,10 @@
           paintings[selectedIndex] = candidate;
           setStatus('Record aggiornato.');
         }
+        sortPaintingsById();
         renderTable();
         resetForm();
+        downloadJson();
       });
 
       clearBtn.addEventListener('click', () => {
@@ -360,16 +390,7 @@
       });
 
       downloadBtn.addEventListener('click', () => {
-        const blob = new Blob([JSON.stringify(paintings, null, 2)], {
-          type: 'application/json'
-        });
-        const url = URL.createObjectURL(blob);
-        const anchor = document.createElement('a');
-        anchor.href = url;
-        anchor.download = 'Paintings.json';
-        anchor.click();
-        URL.revokeObjectURL(url);
-        setStatus('Download avviato.');
+        downloadJson();
       });
 
       setFormEnabled(false);
