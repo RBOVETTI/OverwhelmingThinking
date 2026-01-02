@@ -32,14 +32,14 @@ export const translations = {
 
     // About page
     aboutTitle: "Chi Sono",
-    aboutText1: "Benvenuto nel mio percorso artistico. Come pittore contemporaneo, esploro l'intersezione tra realtà e astrazione, trovando bellezza sia nel mondo naturale che nella forma pura.",
-    aboutText2: "Il mio lavoro si estende su tre collezioni principali: il mondo potente e maestoso di Mucche e Tori, il regno sconfinato dell'espressione Astratta Pura, e lo spazio intrigante dell'interpretazione Semi Astratta dove la realtà incontra l'immaginazione.",
-    aboutText3: "Ogni opera è creata con passione e attenzione ai dettagli, mirando a evocare emozione e contemplazione nello spettatore. Grazie per aver dedicato del tempo a esplorare il mio lavoro.",
+    aboutText1: "Ho iniziato la mia esperienza con l'artigianato pittorico e la protoarte molto tardi (sicuramente rispetto a quando sarebbe prima) e comunque ad un eta per la quale pasticciare con i colori sarebbe già dovuta essere una fase archiviata da tempo. Da subito ho sviluppato un interesse per la pittura materica, materiali di recupero, per il riciclo delle tele e delle superfici, per le diverse tecniche e modalità stilistiche e di epifania in epifania, ampiamente superata la soglia delle cento opere, continuo a far girare la ruota.",
+    aboutText2: "Questa è la mia filosofia. Sperimentare vivendo di continue e ripetute epifanie (anche su cose che per altri sarebbero probabilmente scontate .. tipo che alla fine, mescola mescola, tutto tende al marrone... quale metafora questa già sarebbe). Di preferenza imbratto superfici e materiali di recupero (che trovo in discarica od ai bordi delle strade che percorrono il Parco Sud di Milano che i miei concittadini considerano tale). Ogni tanto mi concedo il lusso di una tela (nuova o riciclata a sua volta).. ma normalmente uso carta e cartone da imballaggio, legno di recupero.", 
+    aboutText3: "Cerco di non sprecare i colori (per questo non riesco ad usare tavolozze ma preferisco spremere direttamente sulla superficie). Certe volte incollo o inchiodo per fare le cornici o i supporti.A volte sperimento con Cemento, Gesso Edilizio, principalmente con acrilici ma a volte anche con olio, gessetti, pennarelli, tempere od acquerelli. In ogni caso lo faccio sospendendo il giudizio, prima di tutto su me stesso. E questo, conoscendomi, non è poco.".
 
     // Hero section
     heroWelcome: "Benvenuto",
-    heroTitle: "Acquista opere d'arte dei migliori artisti del mondo",
-    heroSubtitle: "Benvenuto su OverwhelmingThinking. Scopri delle creazioni suggestive che valorizzano il tuo spazio, curate apposta per te",
+    heroTitle: "Fai un giro nelle parti meno visibili della mia mente",
+    heroSubtitle: "E se per sbaglio ti piacesse qualcosa contattami ...",
     heroButton: "Scopri le opere",
     heroLearnMore: "Scopri di più",
 

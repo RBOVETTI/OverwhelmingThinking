@@ -16,7 +16,7 @@ const Header = () => {
     <header className="header">
       {/* Top banner */}
       <div className="header-banner">
-        Nuovi arrivi, selezioni dei curatori, caratteristiche esclusive - iscriviti alla nostra newsletter e ottieni il 10% di sconto sul tuo primo ordine
+         Per gioco, per sfida verso me stesso, sicuramente non con vellietà artistiche mi sono messo a pasticciare .. e questo è il risultato .. Teniamoci in contatto, se possibile
       </div>
 
       {/* Main header */}
@@ -71,10 +71,6 @@ const Header = () => {
             <Link to="/?category=all" className="category-link">{t('allArtworks')}</Link>
             <Link to="/?category=paintings" className="category-link">Pittura</Link>
             <Link to="/?category=photography" className="category-link">Fotografia</Link>
-            <Link to="/?category=sculpture" className="category-link">Scultura</Link>
-            <Link to="/?category=design" className="category-link">Disegno</Link>
-            <Link to="/artists" className="category-link">Artisti</Link>
-            <Link to="/special-offers" className="category-link special">Offerte speciali</Link>
           </nav>
         </div>
       </div>
