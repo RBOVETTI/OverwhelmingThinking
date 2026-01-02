@@ -173,7 +173,13 @@
 
 .category-link:hover {
   color: #1a1a1a;
-  border-bottom-color: #FF6A88;
+  border-bottom-color: var(--primary-color);
+}
+
+.category-link.active {
+  color: var(--primary-color);
+  font-weight: 600;
+  border-bottom-color: var(--primary-color);
 }
 
 .category-link.special {

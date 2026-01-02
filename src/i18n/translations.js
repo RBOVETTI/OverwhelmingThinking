@@ -4,7 +4,6 @@ export const translations = {
     navHome: "Home",
     navAbout: "Chi Sono",
     navContact: "Contatti",
-    sellYourArt: "Vendi la mia arte",
 
     // Categories
     allArtworks: "Tutte le Opere",
@@ -43,23 +42,6 @@ export const translations = {
     heroButton: "Scopri le opere",
     heroLearnMore: "Scopri di più",
 
-    // Collections
-    collectionTitle: "COLLEZIONE",
-    artNouveau: "Ispirato all'Art Nouveau",
-    artNouveauDesc: "Opere che celebrano le forme naturali, le linee decorative e l'eleganza poetica di questo movimento iconico",
-    discoverCollection: "Scopri la collezione",
-
-    // Famous Artists
-    famousArtistsTitle: "ARTISTI FAMOSI SU OVERWHELMING THINKING",
-    famousArtistsSubtitle: "Colleziona le icone:",
-    famousArtistsDesc: "Matisse, Kahlo, Basquiat e altro ancora",
-    famousArtistsText: "Arricchisci la tua collezione con edizioni di artisti leggendari",
-    discoverFamousArtists: "Scopri tutti gli artisti famosi",
-
-    // Popular Categories
-    popularCategories: "Le categorie più popolari",
-    popularCategoriesDesc: "Qualunque siano i tuoi gusti, i tuoi stili o il tuo stato d'animo, trova delle opere che amerai in queste categorie più popolari",
-
     // Contact page
     contactTitle: "Contatti",
     contactText: "Interessato ad acquistare un'opera o a commissionare un pezzo? Compila il modulo qui sotto e ti risponderò il prima possibile.",
@@ -69,17 +51,13 @@ export const translations = {
     contactMessage: "Messaggio",
     contactSend: "Invia Messaggio",
     contactSuccess: "Grazie per il tuo messaggio! Ti contatterò presto.",
-    interestedIn: "Sono interessato alle seguenti opere:\n\n",
-
-    // Search
-    searchPlaceholder: "Cerca opere, artisti..."
+    interestedIn: "Sono interessato alle seguenti opere:\n\n"
   },
   en: {
     // Navigation
     navHome: "Home",
     navAbout: "About",
     navContact: "Contact",
-    sellYourArt: "Sell your art",
 
     // Categories
     allArtworks: "All Artworks",
@@ -112,28 +90,10 @@ export const translations = {
     aboutText3: "Each piece is created with passion and attention to detail, aiming to evoke emotion and contemplation in the viewer. Thank you for taking the time to explore my work.",
 
     // Hero section
-    heroWelcome: "Welcome",
     heroTitle: "Buy artworks from the world's best artists",
     heroSubtitle: "Welcome to OverwhelmingThinking. Discover evocative creations that enhance your space, curated just for you",
     heroButton: "Discover artworks",
     heroLearnMore: "Learn More",
-
-    // Collections
-    collectionTitle: "COLLECTION",
-    artNouveau: "Inspired by Art Nouveau",
-    artNouveauDesc: "Works that celebrate natural forms, decorative lines and the poetic elegance of this iconic movement",
-    discoverCollection: "Discover the collection",
-
-    // Famous Artists
-    famousArtistsTitle: "FAMOUS ARTISTS ON OVERWHELMING THINKING",
-    famousArtistsSubtitle: "Collect the icons:",
-    famousArtistsDesc: "Matisse, Kahlo, Basquiat and more",
-    famousArtistsText: "Enrich your collection with editions from legendary artists",
-    discoverFamousArtists: "Discover all famous artists",
-
-    // Popular Categories
-    popularCategories: "The most popular categories",
-    popularCategoriesDesc: "Whatever your tastes, styles or mood, find artworks you'll love in these most popular categories",
 
     // Contact page
     contactTitle: "Contact",
@@ -144,9 +104,6 @@ export const translations = {
     contactMessage: "Message",
     contactSend: "Send Message",
     contactSuccess: "Thank you for your message! I will contact you soon.",
-    interestedIn: "I am interested in the following artworks:\n\n",
-
-    // Search
-    searchPlaceholder: "Search artworks, artists..."
+    interestedIn: "I am interested in the following artworks:\n\n"
   }
 };
