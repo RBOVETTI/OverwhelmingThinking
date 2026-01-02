@@ -21,7 +21,7 @@ const Header = () => {
     <header className="header">
       {/* Top banner */}
       <div className="header-banner">
-        Nuovi arrivi, selezioni dei curatori, caratteristiche esclusive - iscriviti alla nostra newsletter e ottieni il 10% di sconto sul tuo primo ordine
+         Per gioco, per sfida verso me stesso, sicuramente non con vellietà artistiche mi sono messo a pasticciare .. e questo è il risultato .. Teniamoci in contatto, se possibile
       </div>
 
       {/* Main header */}
