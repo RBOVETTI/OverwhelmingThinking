@@ -91,13 +91,17 @@
   transition: color 0.2s;
 }
 
-.lang-btn:hover {
+.lang-btn:hover:not(:disabled) {
   color: var(--text-primary);
 }
 
 .lang-btn.active {
   color: var(--primary-color);
   font-weight: 600;
+}
+
+.lang-btn:disabled {
+  cursor: default;
 }
 
 .lang-divider {
