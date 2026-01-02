@@ -1,19 +1,11 @@
-import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React from 'react';
+import { useSearchParams } from 'react-router-dom';
 import ArtworkCard from './ArtworkCard';
 import './Gallery.css';
 
 const Gallery = ({ artworks }) => {
-  const { t } = useTranslation();
-  const [activeCategory, setActiveCategory] = useState('all');
-
-  const categories = [
-    { key: 'all', label: t('allArtworks') },
-    { key: 'Cows and Bulls', label: t('cowsBulls') },
-    { key: 'Pure Abstract', label: t('pureAbstract') },
-    { key: 'Semi Abstract', label: t('semiAbstract') },
-    { key: 'Photos', label: t('photos') }
-  ];
+  const [searchParams] = useSearchParams();
+  const activeCategory = searchParams.get('category') || 'all';
 
   const filteredArtworks = activeCategory === 'all'
     ? artworks
@@ -22,19 +14,6 @@ const Gallery = ({ artworks }) => {
   return (
     <div className="gallery-section" id="gallery">
       <div className="gallery-container">
-        {/* Category filters */}
-        <div className="category-filters">
-          {categories.map(cat => (
-            <button
-              key={cat.key}
-              className={`category-filter-btn ${activeCategory === cat.key ? 'active' : ''}`}
-              onClick={() => setActiveCategory(cat.key)}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </div>
-
         {/* Artwork grid */}
         <div className="gallery-grid">
           {filteredArtworks.map(artwork => (

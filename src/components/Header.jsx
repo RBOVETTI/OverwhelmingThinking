@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useCart } from '../context/CartContext';
 import './Header.css';
@@ -7,6 +7,11 @@ import './Header.css';
 const Header = () => {
   const { t, i18n } = useTranslation();
   const { cart, toggleCart } = useCart();
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
+
+  const activeCategory = searchParams.get('category') || 'all';
+  const isHomePage = location.pathname === '/';
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
@@ -68,13 +73,36 @@ const Header = () => {
       <div className="header-categories">
         <div className="header-container">
           <nav className="category-nav">
-            <Link to="/?category=all" className="category-link">{t('allArtworks')}</Link>
-            <Link to="/?category=paintings" className="category-link">Pittura</Link>
-            <Link to="/?category=photography" className="category-link">Fotografia</Link>
-            <Link to="/?category=sculpture" className="category-link">Scultura</Link>
-            <Link to="/?category=design" className="category-link">Disegno</Link>
-            <Link to="/artists" className="category-link">Artisti</Link>
-            <Link to="/special-offers" className="category-link special">Offerte speciali</Link>
+            <Link
+              to="/?category=all"
+              className={`category-link ${isHomePage && activeCategory === 'all' ? 'active' : ''}`}
+            >
+              {t('allArtworks')}
+            </Link>
+            <Link
+              to="/?category=Cows and Bulls"
+              className={`category-link ${isHomePage && activeCategory === 'Cows and Bulls' ? 'active' : ''}`}
+            >
+              {t('cowsBulls')}
+            </Link>
+            <Link
+              to="/?category=Pure Abstract"
+              className={`category-link ${isHomePage && activeCategory === 'Pure Abstract' ? 'active' : ''}`}
+            >
+              {t('pureAbstract')}
+            </Link>
+            <Link
+              to="/?category=Semi Abstract"
+              className={`category-link ${isHomePage && activeCategory === 'Semi Abstract' ? 'active' : ''}`}
+            >
+              {t('semiAbstract')}
+            </Link>
+            <Link
+              to="/?category=Photos"
+              className={`category-link ${isHomePage && activeCategory === 'Photos' ? 'active' : ''}`}
+            >
+              {t('photos')}
+            </Link>
           </nav>
         </div>
       </div>
