@@ -98,7 +98,7 @@
 
     <div class="toolbar">
       <input type="file" id="fileInput" accept="application/json" />
-      <button type="button" id="downloadBtn" disabled>Scarica JSON</button>
+      <button type="button" id="downloadBtn" disabled>Salva file JSON</button>
       <button type="button" id="newBtn" disabled>Nuovo record</button>
       <span class="status" id="status">Nessun file caricato.</span>
     </div>
@@ -160,7 +160,7 @@
         </div>
       </div>
       <div class="actions">
-        <button type="button" id="saveBtn" disabled>Salva</button>
+        <button type="button" id="saveBtn" disabled>Salva record</button>
         <button type="button" id="clearBtn" disabled>Pulisci form</button>
       </div>
     </fieldset>
@@ -361,7 +361,7 @@
         anchor.download = 'Paintings.json';
         anchor.click();
         URL.revokeObjectURL(url);
-        setStatus('Download avviato.');
+        setStatus('Salvataggio file avviato.');
       };
 
       saveBtn.addEventListener('click', () => {
@@ -381,7 +381,6 @@
         sortPaintingsById();
         renderTable();
         resetForm();
-        downloadJson();
       });
 
       clearBtn.addEventListener('click', () => {
