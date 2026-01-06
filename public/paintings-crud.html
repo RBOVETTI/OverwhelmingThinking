@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Paintings CRUD</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 24px;
+        color: #1a1a1a;
+      }
+      h1 {
+        margin-bottom: 8px;
+      }
+      .note {
+        font-size: 14px;
+        color: #555;
+      }
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+        margin: 16px 0;
+      }
+      button {
+        padding: 6px 12px;
+        cursor: pointer;
+      }
+      fieldset {
+        border: 1px solid #ccc;
+        padding: 12px;
+        margin-bottom: 16px;
+      }
+      legend {
+        padding: 0 6px;
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 12px;
+      }
+      label {
+        display: block;
+        font-size: 13px;
+        margin-bottom: 4px;
+      }
+      input,
+      textarea {
+        width: 100%;
+        padding: 6px;
+        box-sizing: border-box;
+      }
+      textarea {
+        min-height: 80px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 12px;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 6px;
+        text-align: left;
+        vertical-align: top;
+      }
+      th {
+        background: #f5f5f5;
+      }
+      .actions {
+        display: flex;
+        gap: 6px;
+      }
+      .status {
+        margin-top: 10px;
+        font-size: 13px;
+        color: #333;
+      }
+      .table-wrapper {
+        max-height: 420px;
+        overflow: auto;
+        border: 1px solid #ddd;
+      }
+      .table-wrapper table {
+        margin-top: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Maschera CRUD per Paintings</h1>
+    <p class="note">
+      Apri questa pagina nel browser, poi carica il file <strong>Paintings.json</strong>.
+      Puoi modificare, aggiungere o eliminare record e infine scaricare il JSON aggiornato.
+    </p>
+
+    <div class="toolbar">
+      <input type="file" id="fileInput" accept="application/json" />
+      <button type="button" id="downloadBtn" disabled>Salva file JSON</button>
+      <button type="button" id="newBtn" disabled>Nuovo record</button>
+      <span class="status" id="status">Nessun file caricato.</span>
+    </div>
+
+    <fieldset>
+      <legend>Dettagli opera</legend>
+      <div class="form-grid">
+        <div>
+          <label for="id">ID</label>
+          <input type="number" id="id" min="1" />
+        </div>
+        <div>
+          <label for="publicationDate">Data pubblicazione (YYYY-MM-DD)</label>
+          <input type="text" id="publicationDate" />
+        </div>
+        <div>
+          <label for="category">Categoria</label>
+          <input type="text" id="category" />
+        </div>
+        <div>
+          <label for="price">Prezzo</label>
+          <input type="text" id="price" />
+        </div>
+        <div>
+          <label for="dimensions">Dimensioni</label>
+          <input type="text" id="dimensions" />
+        </div>
+        <div>
+          <label for="image">Immagine</label>
+          <input type="text" id="image" />
+        </div>
+      </div>
+      <div class="form-grid">
+        <div>
+          <label for="titleIt">Titolo (IT)</label>
+          <input type="text" id="titleIt" />
+        </div>
+        <div>
+          <label for="titleEn">Titolo (EN)</label>
+          <input type="text" id="titleEn" />
+        </div>
+        <div>
+          <label for="techniqueIt">Tecnica (IT)</label>
+          <input type="text" id="techniqueIt" />
+        </div>
+        <div>
+          <label for="techniqueEn">Tecnica (EN)</label>
+          <input type="text" id="techniqueEn" />
+        </div>
+      </div>
+      <div class="form-grid">
+        <div>
+          <label for="descriptionIt">Descrizione (IT)</label>
+          <textarea id="descriptionIt"></textarea>
+        </div>
+        <div>
+          <label for="descriptionEn">Descrizione (EN)</label>
+          <textarea id="descriptionEn"></textarea>
+        </div>
+      </div>
+      <div class="actions">
+        <button type="button" id="saveBtn" disabled>Salva record</button>
+        <button type="button" id="clearBtn" disabled>Pulisci form</button>
+      </div>
+    </fieldset>
+
+    <div class="table-wrapper">
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Titolo (IT)</th>
+            <th>Categoria</th>
+            <th>Prezzo</th>
+            <th>Azioni</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <script>
+      const fileInput = document.getElementById('fileInput');
+      const downloadBtn = document.getElementById('downloadBtn');
+      const newBtn = document.getElementById('newBtn');
+      const saveBtn = document.getElementById('saveBtn');
+      const clearBtn = document.getElementById('clearBtn');
+      const status = document.getElementById('status');
+      const tableBody = document.querySelector('#dataTable tbody');
+
+      const fields = {
+        id: document.getElementById('id'),
+        publicationDate: document.getElementById('publicationDate'),
+        category: document.getElementById('category'),
+        price: document.getElementById('price'),
+        dimensions: document.getElementById('dimensions'),
+        image: document.getElementById('image'),
+        titleIt: document.getElementById('titleIt'),
+        titleEn: document.getElementById('titleEn'),
+        techniqueIt: document.getElementById('techniqueIt'),
+        techniqueEn: document.getElementById('techniqueEn'),
+        descriptionIt: document.getElementById('descriptionIt'),
+        descriptionEn: document.getElementById('descriptionEn')
+      };
+
+      let paintings = [];
+      let selectedIndex = null;
+
+      const setStatus = (message) => {
+        status.textContent = message;
+      };
+
+      const setFormEnabled = (enabled) => {
+        saveBtn.disabled = !enabled;
+        clearBtn.disabled = !enabled;
+        newBtn.disabled = !enabled;
+        downloadBtn.disabled = !enabled;
+      };
+
+      const resetForm = () => {
+        Object.values(fields).forEach((field) => {
+          field.value = '';
+        });
+        selectedIndex = null;
+      };
+
+      const fillForm = (painting) => {
+        fields.id.value = painting.id ?? '';
+        fields.publicationDate.value = painting.publicationDate ?? '';
+        fields.category.value = painting.category ?? '';
+        fields.price.value = painting.price ?? '';
+        fields.dimensions.value = painting.dimensions ?? '';
+        fields.image.value = painting.image ?? '';
+        fields.titleIt.value = painting.title?.it ?? '';
+        fields.titleEn.value = painting.title?.en ?? '';
+        fields.techniqueIt.value = painting.technique?.it ?? '';
+        fields.techniqueEn.value = painting.technique?.en ?? '';
+        fields.descriptionIt.value = painting.description?.it ?? '';
+        fields.descriptionEn.value = painting.description?.en ?? '';
+      };
+
+      const buildPaintingFromForm = () => ({
+        id: Number(fields.id.value) || 0,
+        publicationDate: fields.publicationDate.value.trim(),
+        title: {
+          it: fields.titleIt.value.trim(),
+          en: fields.titleEn.value.trim()
+        },
+        technique: {
+          it: fields.techniqueIt.value.trim(),
+          en: fields.techniqueEn.value.trim()
+        },
+        category: fields.category.value.trim(),
+        price: fields.price.value.trim(),
+        dimensions: fields.dimensions.value.trim(),
+        description: {
+          it: fields.descriptionIt.value.trim(),
+          en: fields.descriptionEn.value.trim()
+        },
+        image: fields.image.value.trim()
+      });
+
+      const sortPaintingsById = () => {
+        paintings.sort((a, b) => (a?.id || 0) - (b?.id || 0));
+      };
+
+      const renderTable = () => {
+        sortPaintingsById();
+        tableBody.innerHTML = '';
+        paintings.forEach((painting, index) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${painting.id ?? ''}</td>
+            <td>${painting.title?.it ?? ''}</td>
+            <td>${painting.category ?? ''}</td>
+            <td>${painting.price ?? ''}</td>
+            <td class="actions"></td>
+          `;
+          const actionsCell = row.querySelector('.actions');
+
+          const editBtn = document.createElement('button');
+          editBtn.type = 'button';
+          editBtn.textContent = 'Modifica';
+          editBtn.addEventListener('click', () => {
+            selectedIndex = index;
+            fillForm(painting);
+            setStatus(`Modifica record ID ${painting.id ?? ''}`);
+          });
+
+          const deleteBtn = document.createElement('button');
+          deleteBtn.type = 'button';
+          deleteBtn.textContent = 'Elimina';
+          deleteBtn.addEventListener('click', () => {
+            if (confirm('Eliminare questo record?')) {
+              paintings.splice(index, 1);
+              renderTable();
+              resetForm();
+              setStatus('Record eliminato.');
+            }
+          });
+
+          actionsCell.append(editBtn, deleteBtn);
+          tableBody.appendChild(row);
+        });
+      };
+
+      const ensureUniqueId = (candidateId) => {
+        if (!candidateId) {
+          const maxId = paintings.reduce((max, painting) => Math.max(max, painting.id || 0), 0);
+          return maxId + 1;
+        }
+        const exists = paintings.some(
+          (painting, index) => painting.id === candidateId && index !== selectedIndex
+        );
+        if (exists) {
+          alert('ID già esistente. Usa un ID diverso.');
+          return null;
+        }
+        return candidateId;
+      };
+
+      fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (!file) {
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const data = JSON.parse(e.target.result);
+            if (!Array.isArray(data)) {
+              throw new Error('JSON non valido: atteso un array.');
+            }
+            paintings = data;
+            renderTable();
+            resetForm();
+            setFormEnabled(true);
+            setStatus(`Caricati ${paintings.length} record.`);
+          } catch (error) {
+            setStatus(`Errore: ${error.message}`);
+            alert('Impossibile leggere il file JSON.');
+          }
+        };
+        reader.readAsText(file);
+      });
+
+      newBtn.addEventListener('click', () => {
+        resetForm();
+        fields.id.value = ensureUniqueId(0) || '';
+        setStatus('Nuovo record.');
+      });
+
+      const downloadJson = () => {
+        const blob = new Blob([JSON.stringify(paintings, null, 2)], {
+          type: 'application/json'
+        });
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = 'Paintings.json';
+        anchor.click();
+        URL.revokeObjectURL(url);
+        setStatus('Salvataggio file avviato.');
+      };
+
+      saveBtn.addEventListener('click', () => {
+        const candidate = buildPaintingFromForm();
+        const validatedId = ensureUniqueId(candidate.id);
+        if (validatedId === null) {
+          return;
+        }
+        candidate.id = validatedId;
+        if (selectedIndex === null) {
+          paintings.push(candidate);
+          setStatus('Record aggiunto.');
+        } else {
+          paintings[selectedIndex] = candidate;
+          setStatus('Record aggiornato.');
+        }
+        sortPaintingsById();
+        renderTable();
+        resetForm();
+      });
+
+      clearBtn.addEventListener('click', () => {
+        resetForm();
+        setStatus('Form pulito.');
+      });
+
+      downloadBtn.addEventListener('click', () => {
+        downloadJson();
+      });
+
+      setFormEnabled(false);
+    </script>
+  </body>
+</html>
