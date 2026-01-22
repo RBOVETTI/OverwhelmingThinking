@@ -3,42 +3,45 @@
 }
 
 .about-hero {
-  background: var(--primary-gradient);
-  padding: 80px 40px;
+  background: var(--color-accent-cold);
+  padding: var(--space-xl) var(--space-lg);
   text-align: center;
   color: white;
 }
 
 .about-hero h1 {
-  font-size: 48px;
-  font-weight: 700;
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 300;
   margin: 0;
-  letter-spacing: -1px;
+  letter-spacing: 0.02em;
 }
 
 .about-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 80px 40px;
+  padding: var(--space-xl) var(--space-lg);
 }
 
 .about-content {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 80px;
+  gap: var(--space-xl);
   align-items: start;
 }
 
 .about-text {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: var(--space-md);
 }
 
 .about-paragraph {
-  font-size: 18px;
-  line-height: 1.8;
-  color: #444;
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--color-text);
   margin: 0;
 }
 
@@ -49,26 +52,28 @@
 
 .about-image-placeholder {
   aspect-ratio: 3/4;
-  background: #f5f5f5;
-  border-radius: 12px;
+  background: var(--color-bg);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #ccc;
+  color: var(--color-text-secondary);
+  border: 1px solid rgba(27, 54, 93, 0.1);
 }
 
 .about-image-placeholder p {
-  margin-top: 16px;
-  font-size: 14px;
+  margin-top: var(--space-sm);
+  font-family: var(--font-serif);
+  font-size: 0.875rem;
+  font-style: italic;
 }
 
 /* Artist photo styles */
 .about-image-container {
   aspect-ratio: 3/4;
-  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(27, 54, 93, 0.1);
 }
 
 .about-artist-photo {
@@ -76,13 +81,14 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  filter: grayscale(100%);
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
   .about-content {
     grid-template-columns: 1fr;
-    gap: 48px;
+    gap: var(--space-lg);
   }
 
   .about-image-section {
@@ -98,18 +104,14 @@
 
 @media (max-width: 768px) {
   .about-hero {
-    padding: 60px 20px;
-  }
-
-  .about-hero h1 {
-    font-size: 36px;
+    padding: var(--space-lg) var(--space-md);
   }
 
   .about-container {
-    padding: 60px 20px;
+    padding: var(--space-lg) var(--space-md);
   }
 
   .about-paragraph {
-    font-size: 16px;
+    font-size: 1rem;
   }
 }

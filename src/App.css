@@ -8,37 +8,70 @@
   flex: 1;
 }
 
-/* Footer */
+/* Footer - aligned with rbovetti.com parent site */
 .footer {
-  background: #1a1a1a;
-  color: white;
-  padding: 32px 0;
+  background: var(--color-bg);
+  padding: var(--space-xl) var(--space-lg);
+  padding-bottom: var(--space-lg);
   margin-top: auto;
+}
+
+.footer-line {
+  width: 60px;
+  height: 1px;
+  background-color: var(--color-accent-cold);
+  margin-bottom: var(--space-md);
 }
 
 .footer-content {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 40px;
-  text-align: center;
+  padding: 0 var(--space-lg);
 }
 
 .footer-content p {
   margin: 0;
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  opacity: 0.6;
+  letter-spacing: 0.05em;
+}
+
+.footer-links {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+
+.footer-links a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  transition: color var(--transition-medium);
+}
+
+.footer-links a:hover {
+  color: var(--color-accent-warm);
+}
+
+.footer-links .icon {
+  width: 22px;
+  height: 22px;
+  color: inherit;
 }
 
 @media (max-width: 768px) {
   .footer {
-    padding: 24px 0;
+    padding: var(--space-lg);
   }
 
   .footer-content {
-    padding: 0 20px;
+    padding: 0 var(--space-md);
   }
 
   .footer-content p {
-    font-size: 13px;
+    font-size: 0.8125rem;
   }
 }

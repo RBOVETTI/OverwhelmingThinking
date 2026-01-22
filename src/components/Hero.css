@@ -2,7 +2,7 @@
   position: relative;
   height: 600px;
   overflow: hidden;
-  background: #1a1a1a;
+  background: var(--color-text);
 }
 
 .hero-image-container {
@@ -38,8 +38,8 @@
   bottom: 0;
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.3) 0%,
-    rgba(0, 0, 0, 0.5) 100%
+    rgba(26, 26, 26, 0.4) 0%,
+    rgba(26, 26, 26, 0.6) 100%
   );
 }
 
@@ -49,7 +49,7 @@
   height: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 40px;
+  padding: 0 var(--space-lg);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -74,67 +74,76 @@
 }
 
 .hero-title {
-  font-size: 56px;
-  font-weight: 700;
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 300;
   color: white;
-  margin: 0 0 24px 0;
+  margin: 0 0 var(--space-md) 0;
   line-height: 1.2;
-  letter-spacing: -1px;
+  letter-spacing: 0.02em;
   text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
 }
 
 .hero-subtitle {
-  font-size: 20px;
-  color: rgba(255, 255, 255, 0.95);
-  margin: 0 0 40px 0;
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 var(--space-lg) 0;
   line-height: 1.6;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .hero-buttons {
   display: flex;
-  gap: 16px;
+  gap: var(--space-sm);
   justify-content: center;
   flex-wrap: wrap;
 }
 
 .btn-primary,
 .btn-secondary {
-  padding: 16px 32px;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 0;
   text-decoration: none;
-  transition: all 0.3s;
+  transition: all var(--transition-medium);
   display: inline-block;
 }
 
 .btn-primary {
-  background: var(--primary-gradient);
+  background: var(--color-accent-warm);
   color: white;
-  border: 2px solid transparent;
+  border: 2px solid var(--color-accent-warm);
 }
 
 .btn-primary:hover {
+  background: transparent;
+  color: white;
+  border-color: white;
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(184, 149, 106, 0.4);
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
+  background: transparent;
   color: white;
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.5);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.6);
+  background: white;
+  color: var(--color-text);
+  border-color: white;
 }
 
 .hero-indicators {
   position: absolute;
-  bottom: 40px;
+  bottom: var(--space-lg);
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -142,13 +151,13 @@
 }
 
 .indicator {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.4);
   border: none;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all var(--transition-medium);
   padding: 0;
 }
 
@@ -158,8 +167,8 @@
 
 .indicator.active {
   width: 32px;
-  border-radius: 6px;
-  background: white;
+  border-radius: 5px;
+  background: var(--color-accent-warm);
 }
 
 /* Responsive */
@@ -169,11 +178,11 @@
   }
 
   .hero-title {
-    font-size: 42px;
+    margin-bottom: var(--space-sm);
   }
 
   .hero-subtitle {
-    font-size: 18px;
+    margin-bottom: var(--space-md);
   }
 }
 
@@ -183,33 +192,23 @@
   }
 
   .hero-content {
-    padding: 0 20px;
-  }
-
-  .hero-title {
-    font-size: 32px;
-    margin-bottom: 16px;
-  }
-
-  .hero-subtitle {
-    font-size: 16px;
-    margin-bottom: 32px;
+    padding: 0 var(--space-md);
   }
 
   .hero-buttons {
     flex-direction: column;
     width: 100%;
-    max-width: 300px;
+    max-width: 280px;
   }
 
   .btn-primary,
   .btn-secondary {
     width: 100%;
-    padding: 14px 24px;
-    font-size: 15px;
+    padding: var(--space-sm) var(--space-sm);
+    font-size: 0.8125rem;
   }
 
   .hero-indicators {
-    bottom: 24px;
+    bottom: var(--space-md);
   }
 }

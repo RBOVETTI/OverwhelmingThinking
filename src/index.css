@@ -9,23 +9,36 @@
 }
 
 :root {
-  /* Colors - Neutral & Elegant Palette */
-  --primary-gradient: linear-gradient(135deg, #B8956A 0%, #A68860 50%, #8F7556 100%);
-  --primary-color: #B8956A;
-  --primary-dark: #8F7556;
-  --text-primary: #2C2C2C;
-  --text-secondary: #6B6B6B;
-  --text-light: #9A9A9A;
-  --bg-white: #FFFFFF;
-  --bg-light: #FAF8F3;
-  --bg-gray: #E8E6E1;
-  --border-light: #D4D2CC;
-  --border-gray: #C4C2BC;
+  /* Colors - Aligned with rbovetti.com parent site */
+  --color-bg: #FAFAF8;
+  --color-text: #1A1A1A;
+  --color-text-secondary: #4A4A4A;
+  --color-accent-warm: #8B2635;
+  --color-accent-cold: #1B365D;
 
-  /* Typography */
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  /* Legacy color mappings for component compatibility */
+  --primary-gradient: linear-gradient(135deg, #8B2635 0%, #6B1D29 100%);
+  --primary-color: #8B2635;
+  --primary-dark: #6B1D29;
+  --text-primary: #1A1A1A;
+  --text-secondary: #4A4A4A;
+  --text-light: #6B6B6B;
+  --bg-white: #FFFFFF;
+  --bg-light: #FAFAF8;
+  --bg-gray: #F0F0EE;
+  --border-light: rgba(27, 54, 93, 0.1);
+  --border-gray: rgba(27, 54, 93, 0.15);
+
+  /* Typography - matching parent site */
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Spacing */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 2rem;
+  --space-lg: 4rem;
+  --space-xl: 6rem;
 
   /* Shadows */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -48,10 +61,11 @@ html {
 
 body {
   font-family: var(--font-sans);
-  font-size: 16px;
-  line-height: 1.6;
-  color: var(--text-primary);
-  background: var(--bg-white);
+  font-size: 1.125rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--color-text);
+  background-color: var(--color-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -67,48 +81,53 @@ body {
    =================================== */
 
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
+  font-family: var(--font-serif);
+  font-weight: 400;
   line-height: 1.2;
-  color: var(--text-primary);
+  color: var(--color-text);
+  letter-spacing: 0.02em;
 }
 
 h1 {
-  font-size: 48px;
+  font-size: clamp(2rem, 3vw, 2.75rem);
+  font-weight: 300;
 }
 
 h2 {
-  font-size: 36px;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
 }
 
 h3 {
-  font-size: 28px;
+  font-size: 1.5rem;
+  font-weight: 500;
 }
 
 h4 {
-  font-size: 24px;
+  font-size: 1.25rem;
 }
 
 h5 {
-  font-size: 20px;
+  font-size: 1.1rem;
 }
 
 h6 {
-  font-size: 18px;
+  font-size: 1rem;
 }
 
 p {
-  margin-bottom: 1em;
-  line-height: 1.8;
+  margin-bottom: var(--space-md);
+  line-height: 1.7;
+  color: var(--color-text);
 }
 
 a {
-  color: var(--primary-color);
+  color: inherit;
   text-decoration: none;
-  transition: color var(--transition-fast);
+  transition: color var(--transition-medium);
 }
 
 a:hover {
-  color: var(--primary-dark);
+  color: var(--color-accent-warm);
 }
 
 /* ===================================
@@ -160,34 +179,20 @@ a:hover {
    =================================== */
 
 @media (max-width: 1024px) {
-  h1 {
-    font-size: 40px;
-  }
-
-  h2 {
-    font-size: 32px;
-  }
-
-  h3 {
-    font-size: 24px;
+  :root {
+    --space-lg: 3rem;
+    --space-xl: 4rem;
   }
 }
 
 @media (max-width: 768px) {
+  :root {
+    --space-lg: 2rem;
+    --space-xl: 3rem;
+  }
+
   body {
-    font-size: 15px;
-  }
-
-  h1 {
-    font-size: 32px;
-  }
-
-  h2 {
-    font-size: 28px;
-  }
-
-  h3 {
-    font-size: 22px;
+    font-size: 1rem;
   }
 
   .container {
@@ -199,26 +204,16 @@ a:hover {
   }
 }
 
-@media (max-width: 480px) {
-  h1 {
-    font-size: 28px;
-  }
-
-  h2 {
-    font-size: 24px;
-  }
-}
-
 /* ===================================
    Selection Styling
    =================================== */
 
 ::selection {
-  background: rgba(255, 106, 136, 0.2);
-  color: var(--text-primary);
+  background: rgba(139, 38, 53, 0.2);
+  color: var(--color-text);
 }
 
 ::-moz-selection {
-  background: rgba(255, 106, 136, 0.2);
-  color: var(--text-primary);
+  background: rgba(139, 38, 53, 0.2);
+  color: var(--color-text);
 }
