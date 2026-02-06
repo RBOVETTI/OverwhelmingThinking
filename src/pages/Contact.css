@@ -16,6 +16,7 @@
   font-weight: 300;
   margin: 0 0 var(--space-sm) 0;
   letter-spacing: 0.02em;
+  color: var(--color-bg);
 }
 
 .contact-hero p {
@@ -27,6 +28,7 @@
   margin: 0 auto;
   line-height: 1.6;
   opacity: 0.95;
+  color: var(--color-bg);
 }
 
 .contact-container {
