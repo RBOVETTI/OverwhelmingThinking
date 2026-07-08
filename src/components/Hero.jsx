@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import './Hero.css';
 
 const Hero = ({ artworks }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -20,11 +20,6 @@ const Hero = ({ artworks }) => {
   if (!artworks || artworks.length === 0) {
     return null;
   }
-
-  const currentArtwork = artworks[currentIndex];
-  const title = typeof currentArtwork.title === 'object'
-    ? currentArtwork.title[i18n.language]
-    : currentArtwork.title;
 
   return (
     <div className="hero">

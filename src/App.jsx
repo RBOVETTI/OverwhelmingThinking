@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Cart from './components/Cart';
@@ -10,12 +10,7 @@ import artworksData from './data/Paintings.json';
 import './App.css';
 
 function App() {
-  const [artworks, setArtworks] = useState([]);
-
-  useEffect(() => {
-    // Load artworks from JSON
-    setArtworks(artworksData);
-  }, []);
+  const artworks = artworksData;
 
   return (
     <Router>

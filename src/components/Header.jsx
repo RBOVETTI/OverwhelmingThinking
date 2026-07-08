@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link, useSearchParams, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../context/useCart';
 import './Header.css';
 
 const Header = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { cart, toggleCart } = useCart();
   const [searchParams] = useSearchParams();
   const location = useLocation();

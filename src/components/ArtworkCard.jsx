@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../context/useCart';
 import './ArtworkCard.css';
 
 const ArtworkCard = ({ artwork }) => {

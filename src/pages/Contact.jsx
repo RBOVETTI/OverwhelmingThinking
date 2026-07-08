@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../context/useCart';
 import './Contact.css';
 
 const Contact = () => {

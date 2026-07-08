@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
+    "test:instagram": "node --test tests/*.test.mjs",
+    "import:instagram": "node scripts/import-instagram-artworks.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

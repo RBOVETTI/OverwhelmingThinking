@@ -31,7 +31,7 @@
   function getStoredLang(key) {
     try {
       return normalizeLang(window.localStorage.getItem(key));
-    } catch (error) {
+    } catch {
       return "";
     }
   }
@@ -39,7 +39,7 @@
   function getQueryLang() {
     try {
       return normalizeLang(new URLSearchParams(window.location.search).get("lang"));
-    } catch (error) {
+    } catch {
       return "";
     }
   }
@@ -92,7 +92,7 @@
   function hasSeenModal(lang) {
     try {
       return window.localStorage.getItem(getStorageKey(lang)) === "1";
-    } catch (error) {
+    } catch {
       return false;
     }
   }
@@ -100,7 +100,7 @@
   function markModalSeen(lang) {
     try {
       window.localStorage.setItem(getStorageKey(lang), "1");
-    } catch (error) {
+    } catch {
       return;
     }
   }
