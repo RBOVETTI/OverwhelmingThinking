@@ -66,12 +66,12 @@
     return (
       getQueryLang() ||
       getControlLang() ||
+      getPathLang() ||
+      normalizeLang(document.documentElement.lang) ||
       getStoredLang("prompting101-lang") ||
       getStoredLang("lang") ||
       getStoredLang("i18nextLng") ||
       getStoredLang("language") ||
-      normalizeLang(document.documentElement.lang) ||
-      getPathLang() ||
       normalizeLang(navigator.language) ||
       "it"
     );
