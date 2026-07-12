@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { existsSync } from 'node:fs';
-import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, readdir, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 import { isLikelyArtworkPost, parseCaption } from './instagram-parser.mjs';
@@ -25,13 +25,17 @@ async function main() {
   await mkdir(options.cacheDir, { recursive: true });
   await mkdir(path.dirname(options.reportPath), { recursive: true });
 
-  const profile = await fetchProfile(options.username);
-  await writeJson(path.join(options.cacheDir, 'profile.json'), profile);
+  const profile = options.fromCache ? await readCachedProfile(options.cacheDir) : await fetchProfile(options.username);
+  if (!options.fromCache) {
+    await writeJson(path.join(options.cacheDir, 'profile.json'), profile);
+  }
 
-  const { pages, items } = await fetchFeedPages(options);
-  await Promise.all(
-    pages.map((page, index) => writeJson(path.join(options.cacheDir, `feed-page-${String(index + 1).padStart(3, '0')}.json`), page)),
-  );
+  const { pages, items } = options.fromCache ? await readCachedFeedPages(options.cacheDir) : await fetchFeedPages(options);
+  if (!options.fromCache) {
+    await Promise.all(
+      pages.map((page, index) => writeJson(path.join(options.cacheDir, `feed-page-${String(index + 1).padStart(3, '0')}.json`), page)),
+    );
+  }
 
   const limitedItems = options.limit ? items.slice(0, options.limit) : items;
   const skipped = [];
@@ -50,29 +54,34 @@ async function main() {
       skipped.push(skipItem(item, 'missing-image'));
       continue;
     }
-    if (!isLikelyArtworkPost(item)) {
+
+    const importable = isLikelyArtworkPost(item);
+    if (!importable) {
       skipped.push(skipItem(item, 'not-artwork-candidate'));
-      continue;
     }
+
+    const record = buildArtworkRecord(item, {
+      id: importable ? assignedId++ : 0,
+      image: imageFilenameForPost(item),
+    });
+    record.instagramImportable = importable;
 
     imported.push({
       item,
       image,
-      record: buildArtworkRecord(item, {
-        id: assignedId++,
-        image: imageFilenameForPost(item),
-      }),
+      record,
       parsed: parseCaption(captionText),
     });
   }
 
+  const importableRecords = imported.filter(({ record }) => record.instagramImportable);
   const normalizedExisting = normalizeArtworksForSite(existingArtworks);
-  const { artworks: mergedArtworks, added, updated } = mergeArtworks(
+  const { artworks: mergedArtworks, added, updated, removed } = mergeArtworks(
     normalizedExisting,
     imported.map(({ record }) => record),
   );
   const finalArtworks = normalizeArtworksForSite(mergedArtworks);
-  const finalImportedImages = new Set(added.map((artwork) => artwork.image));
+  const finalImportedImages = new Set(finalArtworks.map((artwork) => artwork.image));
   const importedImagesToKeep = imported.filter(({ record }) => finalImportedImages.has(record.image));
   const { downloaded, alreadyPresent, planned } = await handleImages(importedImagesToKeep, options);
   const plannedImages = new Set(importedImagesToKeep.map(({ record }) => record.image));
@@ -97,9 +106,11 @@ async function main() {
     pagesFetched: pages.length,
     totalPostsFetched: items.length,
     totalPostsConsidered: limitedItems.length,
-    artworkCandidates: imported.length,
+    artworkCandidates: importableRecords.length,
+    sourceReferencePosts: imported.length - importableRecords.length,
     added: added.map(reportArtwork),
     updated: updated.map(reportArtwork),
+    removed: removed.map(reportArtwork),
     skipped,
     images: {
       downloaded,
@@ -125,6 +136,7 @@ function parseArgs(argv) {
     maxPages: 60,
     limit: null,
     apply: false,
+    fromCache: false,
     paintingsPath: 'src/data/Paintings.json',
     publicDir: 'Public',
     cacheDir: 'tmp/instagram-cache',
@@ -138,6 +150,7 @@ function parseArgs(argv) {
 
     if (arg === '--apply') options.apply = true;
     else if (arg === '--dry-run') options.apply = false;
+    else if (arg === '--from-cache') options.fromCache = true;
     else if (name === '--username') {
       options.username = value;
       if (!inlineValue) index += 1;
@@ -197,6 +210,26 @@ async function fetchFeedPages(options) {
   }
 
   return { pages, items };
+}
+
+async function readCachedProfile(cacheDir) {
+  return readJson(path.join(cacheDir, 'profile.json'));
+}
+
+async function readCachedFeedPages(cacheDir) {
+  const pageFiles = (await readdir(cacheDir))
+    .filter((fileName) => /^feed-page-\d+\.json$/.test(fileName))
+    .sort();
+
+  if (!pageFiles.length) {
+    throw new Error(`No cached Instagram feed pages found in ${cacheDir}`);
+  }
+
+  const pages = await Promise.all(pageFiles.map((fileName) => readJson(path.join(cacheDir, fileName))));
+  return {
+    pages,
+    items: pages.flatMap((page) => page.items || []),
+  };
 }
 
 async function fetchJson(url) {
@@ -302,8 +335,10 @@ function printSummary(report) {
   console.log(`Instagram import ${report.mode}`);
   console.log(`Fetched ${report.totalPostsFetched} posts across ${report.pagesFetched} pages.`);
   console.log(`Artwork candidates: ${report.artworkCandidates}`);
+  console.log(`Source reference posts: ${report.sourceReferencePosts}`);
   console.log(`Added: ${report.added.length}`);
   console.log(`Updated: ${report.updated.length}`);
+  console.log(`Removed duplicates: ${report.removed.length}`);
   console.log(`Skipped: ${report.skipped.length}`);
   console.log(`Images downloaded: ${report.images.downloaded.length}`);
   console.log(`Images planned: ${report.images.planned.length}`);
@@ -317,6 +352,7 @@ function printHelp() {
 Options:
   --dry-run                Fetch, parse, cache, and report without modifying site data (default)
   --apply                  Download images and write src/data/Paintings.json
+  --from-cache             Read tmp Instagram cache instead of fetching live endpoints
   --username <name>        Instagram username (default: ${DEFAULT_USERNAME})
   --max-pages <number>     Maximum feed pages to fetch (default: 60)
   --count <number>         Posts per Instagram feed page (default: 12)

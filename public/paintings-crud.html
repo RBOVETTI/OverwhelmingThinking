@@ -3,248 +3,480 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Paintings CRUD</title>
+    <title>Paintings JSON Editor</title>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 24px;
-        color: #1a1a1a;
+      :root {
+        color-scheme: light;
+        --bg: #f6f4ef;
+        --panel: #ffffff;
+        --ink: #1f2328;
+        --muted: #667085;
+        --line: #d9d6cf;
+        --accent: #0b6b62;
+        --accent-dark: #084b45;
+        --danger: #a73535;
+        --shadow: 0 12px 32px rgba(31, 35, 40, 0.08);
       }
-      h1 {
-        margin-bottom: 8px;
-      }
-      .note {
-        font-size: 14px;
-        color: #555;
-      }
-      .toolbar {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        align-items: center;
-        margin: 16px 0;
-      }
-      button {
-        padding: 6px 12px;
-        cursor: pointer;
-      }
-      fieldset {
-        border: 1px solid #ccc;
-        padding: 12px;
-        margin-bottom: 16px;
-      }
-      legend {
-        padding: 0 6px;
-      }
-      .form-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 12px;
-      }
-      label {
-        display: block;
-        font-size: 13px;
-        margin-bottom: 4px;
-      }
-      input,
-      textarea {
-        width: 100%;
-        padding: 6px;
+
+      * {
         box-sizing: border-box;
       }
-      textarea {
-        min-height: 80px;
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 12px;
+
+      button,
+      input,
+      textarea,
+      select {
+        font: inherit;
       }
-      th,
-      td {
-        border: 1px solid #ddd;
-        padding: 6px;
-        text-align: left;
-        vertical-align: top;
+
+      button {
+        min-height: 38px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: #fff;
+        color: var(--ink);
+        cursor: pointer;
       }
-      th {
-        background: #f5f5f5;
+
+      button:hover:not(:disabled) {
+        border-color: var(--accent);
       }
-      .actions {
+
+      button:disabled {
+        cursor: not-allowed;
+        opacity: 0.45;
+      }
+
+      .app {
+        width: min(1480px, 100%);
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .topbar {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 16px;
+        align-items: end;
+        margin-bottom: 16px;
+      }
+
+      h1 {
+        margin: 0 0 4px;
+        font-size: 26px;
+        line-height: 1.15;
+      }
+
+      .subtitle {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .file-actions,
+      .record-actions,
+      .nav-actions {
         display: flex;
-        gap: 6px;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
       }
+
+      .primary {
+        border-color: var(--accent);
+        background: var(--accent);
+        color: #fff;
+      }
+
+      .primary:hover:not(:disabled) {
+        border-color: var(--accent-dark);
+        background: var(--accent-dark);
+      }
+
+      .danger {
+        border-color: rgba(167, 53, 53, 0.32);
+        color: var(--danger);
+      }
+
+      .icon-button {
+        width: 42px;
+        padding: 0;
+        font-size: 24px;
+        line-height: 1;
+      }
+
+      .status-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+
       .status {
-        margin-top: 10px;
+        min-height: 34px;
+        display: flex;
+        align-items: center;
+        padding: 8px 10px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.72);
+        color: var(--muted);
         font-size: 13px;
-        color: #333;
       }
-      .table-wrapper {
-        max-height: 420px;
-        overflow: auto;
-        border: 1px solid #ddd;
+
+      .dirty {
+        color: var(--accent-dark);
       }
-      .table-wrapper table {
-        margin-top: 0;
+
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(320px, 46%) minmax(360px, 1fr);
+        gap: 16px;
+        align-items: start;
+      }
+
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        box-shadow: var(--shadow);
+      }
+
+      .image-panel {
+        position: sticky;
+        top: 16px;
+        overflow: hidden;
+      }
+
+      .preview-wrap {
+        display: grid;
+        min-height: 520px;
+        place-items: center;
+        background: #ede9df;
+      }
+
+      .preview-wrap img {
+        display: block;
+        width: 100%;
+        max-height: 76vh;
+        object-fit: contain;
+      }
+
+      .empty-preview {
+        width: 100%;
+        padding: 32px;
+        text-align: center;
+        color: var(--muted);
+      }
+
+      .image-meta {
+        display: grid;
+        gap: 10px;
+        padding: 12px;
+        border-top: 1px solid var(--line);
+      }
+
+      .record-heading {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .record-title {
+        min-width: 0;
+      }
+
+      .record-title strong {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 18px;
+      }
+
+      .record-title span {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .form-panel {
+        padding: 16px;
+      }
+
+      .finder {
+        display: grid;
+        grid-template-columns: minmax(180px, 1fr) minmax(220px, 1.3fr);
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      .field-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .field {
+        display: grid;
+        gap: 5px;
+      }
+
+      .field.full {
+        grid-column: 1 / -1;
+      }
+
+      label {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      input,
+      textarea,
+      select {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: #fff;
+        color: var(--ink);
+      }
+
+      input,
+      select {
+        height: 40px;
+        padding: 0 10px;
+      }
+
+      textarea {
+        min-height: 140px;
+        resize: vertical;
+        padding: 10px;
+        line-height: 1.45;
+      }
+
+      input:focus,
+      textarea:focus,
+      select:focus,
+      button:focus-visible {
+        outline: 2px solid rgba(11, 107, 98, 0.28);
+        outline-offset: 2px;
+      }
+
+      .validation {
+        display: none;
+        margin-top: 12px;
+        padding: 10px 12px;
+        border: 1px solid rgba(167, 53, 53, 0.28);
+        border-radius: 6px;
+        background: #fff5f5;
+        color: var(--danger);
+        font-size: 13px;
+      }
+
+      .validation.is-visible {
+        display: block;
+      }
+
+      .validation ul {
+        margin: 6px 0 0;
+        padding-left: 20px;
+      }
+
+      .image-link {
+        color: var(--accent-dark);
+        font-size: 13px;
+        text-decoration: none;
+      }
+
+      .image-link:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 920px) {
+        .app {
+          padding: 14px;
+        }
+
+        .topbar,
+        .status-row,
+        .layout,
+        .record-heading,
+        .finder,
+        .field-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .image-panel {
+          position: static;
+        }
+
+        .preview-wrap {
+          min-height: 320px;
+        }
       }
     </style>
-    <link rel="stylesheet" href="/book-promo.css" />
   </head>
   <body>
-    <aside class="rb-book-promo" data-rb-book-promo data-rb-book-site="OverwhelmingThinking" data-rb-book-lang="it" aria-label="Appena pubblicato">
-      <a class="rb-book-promo__inner" href="https://www.amazon.it/dp/B0H6KR2LD8" target="_blank" rel="noopener noreferrer">
-        <img class="rb-book-promo__cover" data-rb-book-cover src="/cover-marketing.jpg" alt="" loading="lazy" width="300" height="450">
-        <span class="rb-book-promo__copy">
-          <span class="rb-book-promo__kicker">APPENA PUBBLICATO</span>
-          <strong>Complessità &amp; Sistemi di Senso</strong>
-          <span>L'attesa è finita: "Complessità &amp; Sistemi di Senso" è adesso disponibile su AMAZON sia in formato cartaceo che in EBOOK.</span>
-        </span>
-        <span class="rb-book-promo__cta">Scopri</span>
-      </a>
-    </aside>
+    <main class="app">
+      <header class="topbar">
+        <div>
+          <h1>Paintings JSON Editor</h1>
+          <p class="subtitle">Editor locale per modificare un record alla volta con anteprima immagine.</p>
+        </div>
+        <div class="file-actions">
+          <button type="button" id="openFileBtn" class="primary">Apri JSON</button>
+          <button type="button" id="saveFileBtn" disabled>Salva JSON</button>
+          <button type="button" id="downloadFileBtn" disabled>Scarica copia</button>
+          <input type="file" id="fileInput" accept="application/json,.json" hidden />
+        </div>
+      </header>
 
-    <aside class="rb-book-promo" data-rb-book-promo data-rb-book-site="OverwhelmingThinking" data-rb-book-lang="en" aria-label="Just published" hidden>
-      <a class="rb-book-promo__inner" href="https://www.amazon.com/dp/B0H7255RRC" target="_blank" rel="noopener noreferrer">
-        <img class="rb-book-promo__cover" data-rb-book-cover src="/cover-marketing-en.png" alt="" loading="lazy" width="300" height="450">
-        <span class="rb-book-promo__copy">
-          <span class="rb-book-promo__kicker">JUST PUBLISHED</span>
-          <strong>Complexity &amp; Systems of Meaning</strong>
-          <span>The wait is over: "Complexity &amp; Systems of Meaning" is now available on AMAZON in both paperback and EBOOK format.</span>
-        </span>
-        <span class="rb-book-promo__cta">Discover</span>
-      </a>
-    </aside>
-
-    <div class="rb-book-modal" data-rb-book-modal data-rb-book-lang="it" hidden>
-      <div class="rb-book-modal__backdrop" data-rb-book-modal-close></div>
-      <section class="rb-book-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="rb-book-modal-title-it">
-        <button class="rb-book-modal__close" type="button" data-rb-book-modal-close aria-label="Chiudi finestra">&times;</button>
-        <a class="rb-book-modal__link" href="https://www.amazon.it/dp/B0H6KR2LD8" target="_blank" rel="noopener noreferrer">
-          <img class="rb-book-modal__cover" data-rb-book-cover src="/cover-marketing.jpg" alt="Copertina di Complessità &amp; Sistemi di Senso" loading="lazy" width="300" height="450">
-          <span class="rb-book-modal__content">
-            <span class="rb-book-modal__kicker">APPENA PUBBLICATO</span>
-            <h2 id="rb-book-modal-title-it">Complessità &amp; Sistemi di Senso</h2>
-            <p>L'attesa è finita: "Complessità &amp; Sistemi di Senso" è adesso disponibile su AMAZON sia in formato cartaceo che in EBOOK.</p>
-            <span class="rb-book-modal__cta">Vai al libro</span>
-          </span>
-        </a>
+      <section class="status-row" aria-live="polite">
+        <div id="status" class="status">Nessun file caricato.</div>
+        <div class="record-actions">
+          <button type="button" id="newBtn" disabled>Nuovo</button>
+          <button type="button" id="duplicateBtn" disabled>Duplica</button>
+          <button type="button" id="deleteBtn" class="danger" disabled>Elimina</button>
+        </div>
       </section>
-    </div>
 
-    <div class="rb-book-modal" data-rb-book-modal data-rb-book-lang="en" hidden>
-      <div class="rb-book-modal__backdrop" data-rb-book-modal-close></div>
-      <section class="rb-book-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="rb-book-modal-title-en">
-        <button class="rb-book-modal__close" type="button" data-rb-book-modal-close aria-label="Close window">&times;</button>
-        <a class="rb-book-modal__link" href="https://www.amazon.com/dp/B0H7255RRC" target="_blank" rel="noopener noreferrer">
-          <img class="rb-book-modal__cover" data-rb-book-cover src="/cover-marketing-en.png" alt="Cover of Complexity &amp; Systems of Meaning" loading="lazy" width="300" height="450">
-          <span class="rb-book-modal__content">
-            <span class="rb-book-modal__kicker">JUST PUBLISHED</span>
-            <h2 id="rb-book-modal-title-en">Complexity &amp; Systems of Meaning</h2>
-            <p>The wait is over: "Complexity &amp; Systems of Meaning" is now available on AMAZON in both paperback and EBOOK format.</p>
-            <span class="rb-book-modal__cta">Open book</span>
-          </span>
-        </a>
+      <section class="layout">
+        <aside class="panel image-panel">
+          <div class="preview-wrap">
+            <img id="previewImage" alt="" hidden />
+            <div id="emptyPreview" class="empty-preview">Carica Paintings.json per iniziare.</div>
+          </div>
+          <div class="image-meta">
+            <div class="record-heading">
+              <div class="record-title">
+                <strong id="recordTitle">Nessun record</strong>
+                <span id="recordMeta">0 / 0</span>
+              </div>
+              <div class="nav-actions">
+                <button type="button" id="prevBtn" class="icon-button" aria-label="Opera precedente" disabled>&lsaquo;</button>
+                <button type="button" id="nextBtn" class="icon-button" aria-label="Opera successiva" disabled>&rsaquo;</button>
+              </div>
+            </div>
+            <a id="imageLink" class="image-link" href="#" target="_blank" rel="noopener noreferrer" hidden>Apri immagine</a>
+          </div>
+        </aside>
+
+        <section class="panel form-panel">
+          <div class="finder">
+            <div class="field">
+              <label for="searchInput">Cerca</label>
+              <input id="searchInput" type="search" placeholder="ID, titolo, categoria, immagine" disabled />
+            </div>
+            <div class="field">
+              <label for="recordSelect">Record</label>
+              <select id="recordSelect" disabled></select>
+            </div>
+          </div>
+
+          <form id="editorForm" class="field-grid">
+            <div class="field">
+              <label for="id">ID</label>
+              <input id="id" name="id" type="number" min="1" inputmode="numeric" disabled />
+            </div>
+            <div class="field">
+              <label for="publicationDate">Data pubblicazione</label>
+              <input id="publicationDate" name="publicationDate" type="date" disabled />
+            </div>
+            <div class="field">
+              <label for="category">Categoria</label>
+              <select id="category" name="category" disabled></select>
+            </div>
+            <div class="field">
+              <label for="price">Prezzo</label>
+              <select id="price" name="price" disabled></select>
+            </div>
+            <div class="field">
+              <label for="dimensions">Dimensioni</label>
+              <input id="dimensions" name="dimensions" type="text" list="dimensionsOptions" disabled />
+            </div>
+            <div class="field">
+              <label for="image">Immagine</label>
+              <input id="image" name="image" type="text" list="imageOptions" disabled />
+            </div>
+            <div class="field">
+              <label for="titleIt">Titolo IT</label>
+              <input id="titleIt" name="titleIt" type="text" disabled />
+            </div>
+            <div class="field">
+              <label for="titleEn">Titolo EN</label>
+              <input id="titleEn" name="titleEn" type="text" disabled />
+            </div>
+            <div class="field">
+              <label for="techniqueIt">Tecnica IT</label>
+              <input id="techniqueIt" name="techniqueIt" type="text" list="techniqueItOptions" disabled />
+            </div>
+            <div class="field">
+              <label for="techniqueEn">Tecnica EN</label>
+              <input id="techniqueEn" name="techniqueEn" type="text" list="techniqueEnOptions" disabled />
+            </div>
+            <div class="field full">
+              <label for="descriptionIt">Descrizione IT</label>
+              <textarea id="descriptionIt" name="descriptionIt" disabled></textarea>
+            </div>
+            <div class="field full">
+              <label for="descriptionEn">Descrizione EN</label>
+              <textarea id="descriptionEn" name="descriptionEn" disabled></textarea>
+            </div>
+          </form>
+
+          <datalist id="dimensionsOptions"></datalist>
+          <datalist id="imageOptions"></datalist>
+          <datalist id="techniqueItOptions"></datalist>
+          <datalist id="techniqueEnOptions"></datalist>
+
+          <div id="validation" class="validation"></div>
+        </section>
       </section>
-    </div>
+    </main>
 
-<h1>Maschera CRUD per Paintings</h1>
-    <p class="note">
-      Apri questa pagina nel browser, poi carica il file <strong>Paintings.json</strong>.
-      Puoi modificare, aggiungere o eliminare record e infine scaricare il JSON aggiornato.
-    </p>
-
-    <div class="toolbar">
-      <input type="file" id="fileInput" accept="application/json" />
-      <button type="button" id="downloadBtn" disabled>Salva file JSON</button>
-      <button type="button" id="newBtn" disabled>Nuovo record</button>
-      <span class="status" id="status">Nessun file caricato.</span>
-    </div>
-
-    <fieldset>
-      <legend>Dettagli opera</legend>
-      <div class="form-grid">
-        <div>
-          <label for="id">ID</label>
-          <input type="number" id="id" min="1" />
-        </div>
-        <div>
-          <label for="publicationDate">Data pubblicazione (YYYY-MM-DD)</label>
-          <input type="text" id="publicationDate" />
-        </div>
-        <div>
-          <label for="category">Categoria</label>
-          <input type="text" id="category" />
-        </div>
-        <div>
-          <label for="price">Prezzo</label>
-          <input type="text" id="price" />
-        </div>
-        <div>
-          <label for="dimensions">Dimensioni</label>
-          <input type="text" id="dimensions" />
-        </div>
-        <div>
-          <label for="image">Immagine</label>
-          <input type="text" id="image" />
-        </div>
-      </div>
-      <div class="form-grid">
-        <div>
-          <label for="titleIt">Titolo (IT)</label>
-          <input type="text" id="titleIt" />
-        </div>
-        <div>
-          <label for="titleEn">Titolo (EN)</label>
-          <input type="text" id="titleEn" />
-        </div>
-        <div>
-          <label for="techniqueIt">Tecnica (IT)</label>
-          <input type="text" id="techniqueIt" />
-        </div>
-        <div>
-          <label for="techniqueEn">Tecnica (EN)</label>
-          <input type="text" id="techniqueEn" />
-        </div>
-      </div>
-      <div class="form-grid">
-        <div>
-          <label for="descriptionIt">Descrizione (IT)</label>
-          <textarea id="descriptionIt"></textarea>
-        </div>
-        <div>
-          <label for="descriptionEn">Descrizione (EN)</label>
-          <textarea id="descriptionEn"></textarea>
-        </div>
-      </div>
-      <div class="actions">
-        <button type="button" id="saveBtn" disabled>Salva record</button>
-        <button type="button" id="clearBtn" disabled>Pulisci form</button>
-      </div>
-    </fieldset>
-
-    <div class="table-wrapper">
-      <table id="dataTable">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Titolo (IT)</th>
-            <th>Categoria</th>
-            <th>Prezzo</th>
-            <th>Azioni</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
+    <script src="paintings-crud-core.js"></script>
     <script>
-      const fileInput = document.getElementById('fileInput');
-      const downloadBtn = document.getElementById('downloadBtn');
-      const newBtn = document.getElementById('newBtn');
-      const saveBtn = document.getElementById('saveBtn');
-      const clearBtn = document.getElementById('clearBtn');
-      const status = document.getElementById('status');
-      const tableBody = document.querySelector('#dataTable tbody');
+      const core = window.PaintingsCrudCore;
+
+      const els = {
+        openFileBtn: document.getElementById('openFileBtn'),
+        saveFileBtn: document.getElementById('saveFileBtn'),
+        downloadFileBtn: document.getElementById('downloadFileBtn'),
+        fileInput: document.getElementById('fileInput'),
+        status: document.getElementById('status'),
+        newBtn: document.getElementById('newBtn'),
+        duplicateBtn: document.getElementById('duplicateBtn'),
+        deleteBtn: document.getElementById('deleteBtn'),
+        prevBtn: document.getElementById('prevBtn'),
+        nextBtn: document.getElementById('nextBtn'),
+        searchInput: document.getElementById('searchInput'),
+        recordSelect: document.getElementById('recordSelect'),
+        editorForm: document.getElementById('editorForm'),
+        previewImage: document.getElementById('previewImage'),
+        emptyPreview: document.getElementById('emptyPreview'),
+        recordTitle: document.getElementById('recordTitle'),
+        recordMeta: document.getElementById('recordMeta'),
+        imageLink: document.getElementById('imageLink'),
+        validation: document.getElementById('validation'),
+      };
+
+      const choiceDefaults = {
+        category: ['Cows and Bulls', 'Semi Abstract', 'Photos'],
+        price: ['100€', 'SOLD', 'NON DISPONIBILE', 'DISTRUTTO'],
+      };
 
       const fields = {
         id: document.getElementById('id'),
@@ -258,199 +490,428 @@
         techniqueIt: document.getElementById('techniqueIt'),
         techniqueEn: document.getElementById('techniqueEn'),
         descriptionIt: document.getElementById('descriptionIt'),
-        descriptionEn: document.getElementById('descriptionEn')
+        descriptionEn: document.getElementById('descriptionEn'),
+      };
+
+      const datalists = {
+        dimensions: document.getElementById('dimensionsOptions'),
+        image: document.getElementById('imageOptions'),
+        techniqueIt: document.getElementById('techniqueItOptions'),
+        techniqueEn: document.getElementById('techniqueEnOptions'),
       };
 
       let paintings = [];
-      let selectedIndex = null;
+      let currentIndex = -1;
+      let visibleIndexes = [];
+      let fileHandle = null;
+      let fileName = 'Paintings.json';
+      let dirty = false;
+      let rendering = false;
 
-      const setStatus = (message) => {
-        status.textContent = message;
-      };
+      if (!core) {
+        setStatus('Errore: paintings-crud-core.js non caricato.', true);
+      }
 
-      const setFormEnabled = (enabled) => {
-        saveBtn.disabled = !enabled;
-        clearBtn.disabled = !enabled;
-        newBtn.disabled = !enabled;
-        downloadBtn.disabled = !enabled;
-      };
+      function setStatus(message, isError) {
+        els.status.textContent = message;
+        els.status.classList.toggle('dirty', Boolean(dirty && !isError));
+        els.status.style.color = isError ? 'var(--danger)' : '';
+      }
 
-      const resetForm = () => {
-        Object.values(fields).forEach((field) => {
-          field.value = '';
-        });
-        selectedIndex = null;
-      };
-
-      const fillForm = (painting) => {
-        fields.id.value = painting.id ?? '';
-        fields.publicationDate.value = painting.publicationDate ?? '';
-        fields.category.value = painting.category ?? '';
-        fields.price.value = painting.price ?? '';
-        fields.dimensions.value = painting.dimensions ?? '';
-        fields.image.value = painting.image ?? '';
-        fields.titleIt.value = painting.title?.it ?? '';
-        fields.titleEn.value = painting.title?.en ?? '';
-        fields.techniqueIt.value = painting.technique?.it ?? '';
-        fields.techniqueEn.value = painting.technique?.en ?? '';
-        fields.descriptionIt.value = painting.description?.it ?? '';
-        fields.descriptionEn.value = painting.description?.en ?? '';
-      };
-
-      const buildPaintingFromForm = () => ({
-        id: Number(fields.id.value) || 0,
-        publicationDate: fields.publicationDate.value.trim(),
-        title: {
-          it: fields.titleIt.value.trim(),
-          en: fields.titleEn.value.trim()
-        },
-        technique: {
-          it: fields.techniqueIt.value.trim(),
-          en: fields.techniqueEn.value.trim()
-        },
-        category: fields.category.value.trim(),
-        price: fields.price.value.trim(),
-        dimensions: fields.dimensions.value.trim(),
-        description: {
-          it: fields.descriptionIt.value.trim(),
-          en: fields.descriptionEn.value.trim()
-        },
-        image: fields.image.value.trim()
-      });
-
-      const sortPaintingsById = () => {
-        paintings.sort((a, b) => (a?.id || 0) - (b?.id || 0));
-      };
-
-      const renderTable = () => {
-        sortPaintingsById();
-        tableBody.innerHTML = '';
-        paintings.forEach((painting, index) => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${painting.id ?? ''}</td>
-            <td>${painting.title?.it ?? ''}</td>
-            <td>${painting.category ?? ''}</td>
-            <td>${painting.price ?? ''}</td>
-            <td class="actions"></td>
-          `;
-          const actionsCell = row.querySelector('.actions');
-
-          const editBtn = document.createElement('button');
-          editBtn.type = 'button';
-          editBtn.textContent = 'Modifica';
-          editBtn.addEventListener('click', () => {
-            selectedIndex = index;
-            fillForm(painting);
-            setStatus(`Modifica record ID ${painting.id ?? ''}`);
-          });
-
-          const deleteBtn = document.createElement('button');
-          deleteBtn.type = 'button';
-          deleteBtn.textContent = 'Elimina';
-          deleteBtn.addEventListener('click', () => {
-            if (confirm('Eliminare questo record?')) {
-              paintings.splice(index, 1);
-              renderTable();
-              resetForm();
-              setStatus('Record eliminato.');
-            }
-          });
-
-          actionsCell.append(editBtn, deleteBtn);
-          tableBody.appendChild(row);
-        });
-      };
-
-      const ensureUniqueId = (candidateId) => {
-        if (!candidateId) {
-          const maxId = paintings.reduce((max, painting) => Math.max(max, painting.id || 0), 0);
-          return maxId + 1;
+      function setDirty(value) {
+        dirty = value;
+        if (paintings.length) {
+          setStatus(`${fileName} - ${paintings.length} record${dirty ? ' - modifiche non salvate' : ''}.`);
         }
-        const exists = paintings.some(
-          (painting, index) => painting.id === candidateId && index !== selectedIndex
+      }
+
+      function setEnabled(enabled) {
+        [
+          els.saveFileBtn,
+          els.downloadFileBtn,
+          els.newBtn,
+          els.duplicateBtn,
+          els.deleteBtn,
+          els.prevBtn,
+          els.nextBtn,
+          els.searchInput,
+          els.recordSelect,
+          ...Object.values(fields),
+        ].forEach((element) => {
+          element.disabled = !enabled;
+        });
+      }
+
+      function fieldValues() {
+        return Object.fromEntries(
+          Object.entries(fields).map(([name, field]) => [name, field.value])
         );
-        if (exists) {
-          alert('ID già esistente. Usa un ID diverso.');
-          return null;
-        }
-        return candidateId;
-      };
+      }
 
-      fileInput.addEventListener('change', (event) => {
+      function writeFieldValues(values) {
+        rendering = true;
+        Object.entries(fields).forEach(([name, field]) => {
+          field.value = values[name] || '';
+        });
+        rendering = false;
+      }
+
+      function renderSelectOptions(select, options, placeholder) {
+        const currentValue = select.value;
+        select.innerHTML = '';
+
+        const emptyOption = document.createElement('option');
+        emptyOption.value = '';
+        emptyOption.textContent = placeholder;
+        select.appendChild(emptyOption);
+
+        options.forEach((value) => {
+          const option = document.createElement('option');
+          option.value = value;
+          option.textContent = value;
+          select.appendChild(option);
+        });
+
+        if (currentValue && !options.includes(currentValue)) {
+          const currentOption = document.createElement('option');
+          currentOption.value = currentValue;
+          currentOption.textContent = currentValue;
+          select.appendChild(currentOption);
+        }
+
+        select.value = currentValue;
+      }
+
+      function renderDatalistOptions(datalist, options) {
+        datalist.innerHTML = '';
+        options.forEach((value) => {
+          const option = document.createElement('option');
+          option.value = value;
+          datalist.appendChild(option);
+        });
+      }
+
+      function renderChoiceControls() {
+        renderSelectOptions(
+          fields.category,
+          core.valueOptionsForField(paintings, 'category', choiceDefaults.category),
+          'Seleziona categoria'
+        );
+        renderSelectOptions(
+          fields.price,
+          core.valueOptionsForField(paintings, 'price', choiceDefaults.price),
+          'Seleziona prezzo'
+        );
+        renderDatalistOptions(datalists.dimensions, core.valueOptionsForField(paintings, 'dimensions'));
+        renderDatalistOptions(datalists.image, core.valueOptionsForField(paintings, 'image'));
+        renderDatalistOptions(datalists.techniqueIt, core.valueOptionsForField(paintings, 'techniqueIt'));
+        renderDatalistOptions(datalists.techniqueEn, core.valueOptionsForField(paintings, 'techniqueEn'));
+      }
+
+      function applyCurrentForm() {
+        if (currentIndex < 0 || !paintings[currentIndex]) {
+          return;
+        }
+        paintings[currentIndex] = core.formValuesToPainting(fieldValues(), paintings[currentIndex]);
+        setDirty(true);
+      }
+
+      function currentPainting() {
+        return currentIndex >= 0 ? paintings[currentIndex] : null;
+      }
+
+      function renderRecordOptions() {
+        visibleIndexes = core.filterPaintingIndexes(paintings, els.searchInput.value);
+        els.recordSelect.innerHTML = '';
+
+        visibleIndexes.forEach((index) => {
+          const painting = paintings[index];
+          const option = document.createElement('option');
+          option.value = String(index);
+          option.textContent = `${painting.id || '?'} - ${painting.title.it || '(senza titolo)'}`;
+          els.recordSelect.appendChild(option);
+        });
+
+        if (visibleIndexes.length && !visibleIndexes.includes(currentIndex)) {
+          currentIndex = visibleIndexes[0];
+        }
+        if (!visibleIndexes.length) {
+          currentIndex = paintings.length ? currentIndex : -1;
+        }
+        if (currentIndex >= 0) {
+          els.recordSelect.value = String(currentIndex);
+        }
+      }
+
+      function renderPreview(painting) {
+        const imagePath = painting && painting.image ? painting.image : '';
+        if (!imagePath) {
+          els.previewImage.hidden = true;
+          els.previewImage.removeAttribute('src');
+          els.emptyPreview.hidden = false;
+          els.emptyPreview.textContent = paintings.length ? 'Nessuna immagine impostata.' : 'Carica Paintings.json per iniziare.';
+          els.imageLink.hidden = true;
+          return;
+        }
+
+        els.previewImage.hidden = false;
+        els.previewImage.src = imagePath;
+        els.previewImage.alt = painting.title.it || `Opera ${painting.id || ''}`;
+        els.emptyPreview.hidden = true;
+        els.imageLink.href = imagePath;
+        els.imageLink.textContent = imagePath;
+        els.imageLink.hidden = false;
+      }
+
+      function renderValidation(errors) {
+        if (!errors.length) {
+          els.validation.classList.remove('is-visible');
+          els.validation.innerHTML = '';
+          return;
+        }
+
+        els.validation.innerHTML = `<strong>Controlla prima di salvare:</strong><ul>${errors
+          .map((error) => `<li>${escapeHtml(error)}</li>`)
+          .join('')}</ul>`;
+        els.validation.classList.add('is-visible');
+      }
+
+      function renderCurrent() {
+        renderRecordOptions();
+        renderChoiceControls();
+        const painting = currentPainting();
+        const enabled = paintings.length > 0 && Boolean(painting);
+
+        setEnabled(enabled);
+        els.saveFileBtn.disabled = !paintings.length;
+        els.downloadFileBtn.disabled = !paintings.length;
+        els.newBtn.disabled = !paintings.length;
+
+        if (!enabled) {
+          writeFieldValues({});
+          renderPreview(null);
+          els.recordTitle.textContent = paintings.length ? 'Nessun risultato' : 'Nessun record';
+          els.recordMeta.textContent = paintings.length ? `0 / ${paintings.length}` : '0 / 0';
+          return;
+        }
+
+        writeFieldValues(core.paintingToFormValues(painting));
+        renderPreview(painting);
+
+        const visiblePosition = visibleIndexes.indexOf(currentIndex);
+        els.recordTitle.textContent = painting.title.it || '(senza titolo)';
+        els.recordMeta.textContent = `${visiblePosition + 1} / ${visibleIndexes.length} - ID ${painting.id || '?'}`;
+        els.recordSelect.value = String(currentIndex);
+      }
+
+      function selectIndex(index) {
+        currentIndex = index;
+        renderCurrent();
+      }
+
+      function navigate(delta) {
+        if (!visibleIndexes.length) {
+          return;
+        }
+        const visiblePosition = visibleIndexes.indexOf(currentIndex);
+        const nextVisiblePosition = core.moveIndex(visiblePosition < 0 ? null : visiblePosition, delta, visibleIndexes.length);
+        selectIndex(visibleIndexes[nextVisiblePosition]);
+      }
+
+      function loadJsonText(text, loadedFileName, handle) {
+        const data = JSON.parse(text);
+        if (!Array.isArray(data)) {
+          throw new Error('Il JSON deve essere un array.');
+        }
+
+        paintings = data.map((painting) => core.normalizePainting(painting));
+        currentIndex = paintings.length ? 0 : -1;
+        fileHandle = handle || null;
+        fileName = loadedFileName || 'Paintings.json';
+        els.searchInput.value = '';
+        renderValidation([]);
+        renderCurrent();
+        setDirty(false);
+      }
+
+      async function openWithPicker() {
+        if (!window.showOpenFilePicker) {
+          els.fileInput.click();
+          return;
+        }
+
+        try {
+          const handles = await window.showOpenFilePicker({
+            multiple: false,
+            types: [
+              {
+                description: 'JSON',
+                accept: { 'application/json': ['.json'] },
+              },
+            ],
+          });
+          const handle = handles[0];
+          const file = await handle.getFile();
+          loadJsonText(await file.text(), file.name, handle);
+        } catch (error) {
+          if (error.name !== 'AbortError') {
+            setStatus(`Errore apertura file: ${error.message}`, true);
+          }
+        }
+      }
+
+      async function saveJson(preferDownload) {
+        if (!paintings.length) {
+          return;
+        }
+        applyCurrentForm();
+
+        const errors = core.validatePaintingsForSave(paintings);
+        renderValidation(errors);
+        if (errors.length) {
+          setStatus('Salvataggio bloccato: ci sono errori nel JSON.', true);
+          return;
+        }
+
+        const json = core.serializePaintings(paintings);
+
+        if (!preferDownload && fileHandle && fileHandle.createWritable) {
+          try {
+            const writable = await fileHandle.createWritable();
+            await writable.write(json);
+            await writable.close();
+            setDirty(false);
+            setStatus(`${fileName} salvato.`);
+            return;
+          } catch (error) {
+            setStatus(`Scrittura diretta non riuscita: ${error.message}. Scarico una copia.`, true);
+          }
+        }
+
+        downloadJson(json);
+        setDirty(false);
+        setStatus(`${fileName} pronto come download.`);
+      }
+
+      function downloadJson(json) {
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = fileName || 'Paintings.json';
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      function addPainting(source) {
+        const painting = source ? core.normalizePainting(source) : core.createEmptyPainting(paintings);
+        if (source) {
+          painting.id = core.nextPaintingId(paintings);
+        }
+        paintings.push(painting);
+        currentIndex = paintings.length - 1;
+        els.searchInput.value = '';
+        renderCurrent();
+        setDirty(true);
+      }
+
+      function deleteCurrentPainting() {
+        const painting = currentPainting();
+        if (!painting) {
+          return;
+        }
+        const title = painting.title.it || `ID ${painting.id || '?'}`;
+        if (!window.confirm(`Eliminare "${title}"?`)) {
+          return;
+        }
+
+        paintings.splice(currentIndex, 1);
+        currentIndex = Math.min(currentIndex, paintings.length - 1);
+        renderCurrent();
+        setDirty(true);
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      els.openFileBtn.addEventListener('click', openWithPicker);
+
+      els.fileInput.addEventListener('change', async (event) => {
         const file = event.target.files[0];
         if (!file) {
           return;
         }
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          try {
-            const data = JSON.parse(e.target.result);
-            if (!Array.isArray(data)) {
-              throw new Error('JSON non valido: atteso un array.');
-            }
-            paintings = data;
-            renderTable();
-            resetForm();
-            setFormEnabled(true);
-            setStatus(`Caricati ${paintings.length} record.`);
-          } catch (error) {
-            setStatus(`Errore: ${error.message}`);
-            alert('Impossibile leggere il file JSON.');
-          }
-        };
-        reader.readAsText(file);
+        try {
+          loadJsonText(await file.text(), file.name, null);
+          event.target.value = '';
+        } catch (error) {
+          setStatus(`Errore lettura JSON: ${error.message}`, true);
+        }
       });
 
-      newBtn.addEventListener('click', () => {
-        resetForm();
-        fields.id.value = ensureUniqueId(0) || '';
-        setStatus('Nuovo record.');
+      els.saveFileBtn.addEventListener('click', () => saveJson(false));
+      els.downloadFileBtn.addEventListener('click', () => saveJson(true));
+      els.newBtn.addEventListener('click', () => addPainting(null));
+      els.duplicateBtn.addEventListener('click', () => addPainting(currentPainting()));
+      els.deleteBtn.addEventListener('click', deleteCurrentPainting);
+      els.prevBtn.addEventListener('click', () => navigate(-1));
+      els.nextBtn.addEventListener('click', () => navigate(1));
+
+      els.recordSelect.addEventListener('change', () => {
+        selectIndex(Number(els.recordSelect.value));
       });
 
-      const downloadJson = () => {
-        const blob = new Blob([JSON.stringify(paintings, null, 2)], {
-          type: 'application/json'
-        });
-        const url = URL.createObjectURL(blob);
-        const anchor = document.createElement('a');
-        anchor.href = url;
-        anchor.download = 'Paintings.json';
-        anchor.click();
-        URL.revokeObjectURL(url);
-        setStatus('Salvataggio file avviato.');
-      };
+      els.searchInput.addEventListener('input', () => {
+        renderCurrent();
+      });
 
-      saveBtn.addEventListener('click', () => {
-        const candidate = buildPaintingFromForm();
-        const validatedId = ensureUniqueId(candidate.id);
-        if (validatedId === null) {
+      function handleFormEdit(event) {
+        if (rendering || !event.target.name) {
           return;
         }
-        candidate.id = validatedId;
-        if (selectedIndex === null) {
-          paintings.push(candidate);
-          setStatus('Record aggiunto.');
-        } else {
-          paintings[selectedIndex] = candidate;
-          setStatus('Record aggiornato.');
+        applyCurrentForm();
+        const painting = currentPainting();
+        if (event.target.name === 'image') {
+          renderPreview(painting);
         }
-        sortPaintingsById();
-        renderTable();
-        resetForm();
-      });
+        if (['dimensions', 'image', 'techniqueIt', 'techniqueEn'].includes(event.target.name)) {
+          renderChoiceControls();
+        }
+        if (['id', 'titleIt', 'category'].includes(event.target.name)) {
+          renderRecordOptions();
+          els.recordTitle.textContent = painting.title.it || '(senza titolo)';
+          els.recordMeta.textContent = `${visibleIndexes.indexOf(currentIndex) + 1} / ${visibleIndexes.length} - ID ${painting.id || '?'}`;
+        }
+      }
 
-      clearBtn.addEventListener('click', () => {
-        resetForm();
-        setStatus('Form pulito.');
-      });
+      els.editorForm.addEventListener('input', handleFormEdit);
+      els.editorForm.addEventListener('change', handleFormEdit);
 
-      downloadBtn.addEventListener('click', () => {
-        downloadJson();
-      });
+      document.addEventListener('keydown', (event) => {
+        const tagName = event.target.tagName;
+        const isEditing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(tagName);
 
-      setFormEnabled(false);
+        if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') {
+          event.preventDefault();
+          saveJson(false);
+          return;
+        }
+
+        if (!isEditing && event.key === 'ArrowLeft') {
+          navigate(-1);
+        }
+        if (!isEditing && event.key === 'ArrowRight') {
+          navigate(1);
+        }
+      });
     </script>
-    <script src="/book-promo.js"></script>
   </body>
 </html>

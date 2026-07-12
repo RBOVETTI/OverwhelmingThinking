@@ -53,6 +53,27 @@ L'animale avanza al centro della scena, come emerso da un velo di nebbia alpina.
   );
 });
 
+test('parseCaption keeps labelled dimensions out of the technique field', () => {
+  const caption = `“Non sono stato io”
+Dimensioni: 36x46 cm (dipinto), 52x62 cm (con cornice)
+Tecnica: Olio, acrilico e grafite su tela montata su tavola di legno e inchiodata in cornice di recupero
+
+Sguardo fisso, corpo frontale, linee di misurazione e lettere enigmatiche.`;
+
+  const parsed = parseCaption(caption);
+
+  assert.equal(parsed.title.it, 'Non sono stato io');
+  assert.equal(parsed.dimensions, '36x46 cm');
+  assert.equal(
+    parsed.technique.it,
+    'Olio, acrilico e grafite su tela montata su tavola di legno e inchiodata in cornice di recupero',
+  );
+  assert.equal(
+    parsed.description.it,
+    'Sguardo fisso, corpo frontale, linee di misurazione e lettere enigmatiche.',
+  );
+});
+
 test('parseCaption splits first-line title from technique when Instagram caption combines them', () => {
   const caption = `Essere ed essente. dittico formato da due schizzi a grafite e inchiostro su carta formato A3.
 
@@ -111,5 +132,6 @@ test('inferCategory uses hashtags and text, with a non-null fallback', () => {
     'Semi Abstract',
   );
   assert.equal(inferCategory('Mucca su tela 40x40 cm', []), 'Cows and Bulls');
+  assert.equal(inferCategory('Una foto segnaletica bovina #cowart', ['cowart']), 'Cows and Bulls');
   assert.equal(inferCategory('Studio cromatico senza soggetto', []), 'Cows and Bulls');
 });

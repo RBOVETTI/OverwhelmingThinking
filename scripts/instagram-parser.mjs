@@ -1,7 +1,7 @@
 const DEFAULT_CATEGORY = 'Cows and Bulls';
 
 const ARTWORK_SIGNAL_RE =
-  /\b(cm|acrilico|olio|grafite|tela|carta|cartoncino|pastello|linoleografia|china|tempera|pennarello|supporto|forex|masonite|legno|gesso|cornice|collage|inchiostro)\b/i;
+  /\b(acrilico|olio|grafite|tela|carta|cartoncino|pastello|linoleografia|china|tempera|pennarello|supporto|forex|masonite|legno|gesso|cornice|collage|inchiostro)\b/i;
 
 const DIMENSION_RE =
   /(?:circa\s*)?(?:\d+(?:[.,]\d+)?\s*[x×]\s*\d+(?:[.,]\d+)?(?:\s*[x×]\s*\d+(?:[.,]\d+)?)?\s*cm|formato\s*A\d+|A\d+)/i;
@@ -38,7 +38,7 @@ export function parseCaption(captionText) {
     dimensions = dimensionParts.dimensions;
     dimensionLineIndex = index;
 
-    if (dimensionParts.rest && ARTWORK_SIGNAL_RE.test(dimensionParts.rest)) {
+    if (dimensionParts.rest && !isDimensionLabelLine(line) && ARTWORK_SIGNAL_RE.test(dimensionParts.rest)) {
       technique = cleanTechnique(dimensionParts.rest);
       techniqueLineIndex = index;
     }
@@ -102,12 +102,12 @@ export function inferCategory(text, hashtags = []) {
     return 'Pure Abstract';
   }
 
-  if (/\b(photo|fotografia|foto)\b/i.test(haystack)) {
-    return 'Photos';
+  if (/\b(mucca|mucche|toro|tori|bovino|bovina|bovini|cow|cows|cowart|bull|bulls|bullart|animalart)\b/i.test(haystack)) {
+    return 'Cows and Bulls';
   }
 
-  if (/\b(mucca|mucche|toro|tori|bovino|bovina|bovini|cow|cows|bull|bulls|animalart)\b/i.test(haystack)) {
-    return 'Cows and Bulls';
+  if (/\b(photo|fotografia|foto)\b/i.test(haystack)) {
+    return 'Photos';
   }
 
   return DEFAULT_CATEGORY;
@@ -161,10 +161,15 @@ function normalizeDimensions(value) {
 function cleanTechnique(value) {
   return String(value || '')
     .replace(DIMENSION_RE, '')
+    .replace(/^\s*tecnica\s*[:;,.–—-]?\s*/i, '')
     .replace(/^[\s:;,.–—-]+/, '')
     .replace(/[\s:;,.–—-]+$/, '')
     .replace(/\s{2,}/g, ' ')
     .trim();
+}
+
+function isDimensionLabelLine(line) {
+  return /^\s*dimensioni\s*[:;,.–—-]?/i.test(line);
 }
 
 function splitCombinedTitleLine(rawLines) {
