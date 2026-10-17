@@ -5,7 +5,7 @@
   transition: transform var(--transition-medium), box-shadow var(--transition-medium);
   overflow: hidden;
   background: white;
-  border: 1px solid rgba(27, 54, 93, 0.08);
+  border: 1px solid var(--ink-100);
 }
 
 .artwork-card:hover {
@@ -58,7 +58,7 @@
   color: var(--color-text);
   border: none;
   padding: var(--space-sm) var(--space-md);
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   font-size: 0.8125rem;
   font-weight: 500;
   letter-spacing: 0.05em;
@@ -85,7 +85,7 @@
 }
 
 .artwork-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 1.125rem;
   font-weight: 500;
   color: var(--color-text);
@@ -97,7 +97,7 @@
 }
 
 .artwork-category {
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   font-size: 0.75rem;
   color: var(--color-text-secondary);
   margin: 0 0 var(--space-sm) 0;
@@ -111,18 +111,18 @@
   justify-content: space-between;
   align-items: center;
   padding-top: var(--space-sm);
-  border-top: 1px solid rgba(27, 54, 93, 0.08);
+  border-top: 1px solid var(--ink-100);
 }
 
 .artwork-dimensions {
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   font-size: 0.8125rem;
   color: var(--color-text-secondary);
   margin: 0;
 }
 
 .artwork-price {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 1.25rem;
   font-weight: 500;
   color: var(--color-accent-warm);

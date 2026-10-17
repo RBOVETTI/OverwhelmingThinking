@@ -10,9 +10,9 @@
 }
 
 .about-hero h1 {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 300;
+  font-weight: 400;
   margin: 0;
   letter-spacing: 0.02em;
   color: var(--color-bg);
@@ -38,9 +38,9 @@
 }
 
 .about-paragraph {
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   font-size: 1.125rem;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.7;
   color: var(--color-text);
   margin: 0;
@@ -59,12 +59,12 @@
   align-items: center;
   justify-content: center;
   color: var(--color-text-secondary);
-  border: 1px solid rgba(27, 54, 93, 0.1);
+  border: 1px solid var(--ink-200);
 }
 
 .about-image-placeholder p {
   margin-top: var(--space-sm);
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 0.875rem;
   font-style: italic;
 }
@@ -74,7 +74,7 @@
   aspect-ratio: 3/4;
   overflow: hidden;
   box-shadow: var(--shadow-md);
-  border: 1px solid rgba(27, 54, 93, 0.1);
+  border: 1px solid var(--ink-200);
 }
 
 .about-artist-photo {

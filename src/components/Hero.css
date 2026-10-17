@@ -74,9 +74,9 @@
 }
 
 .hero-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(2.5rem, 5vw, 3.5rem);
-  font-weight: 300;
+  font-weight: 400;
   color: white;
   margin: 0 0 var(--space-md) 0;
   line-height: 1.2;
@@ -85,9 +85,9 @@
 }
 
 .hero-subtitle {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(1.1rem, 2vw, 1.35rem);
-  font-weight: 300;
+  font-weight: 400;
   font-style: italic;
   color: rgba(255, 255, 255, 0.9);
   margin: 0 0 var(--space-lg) 0;
@@ -104,7 +104,7 @@
 
 .btn-primary,
 .btn-secondary {
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   font-size: 0.875rem;
   font-weight: 500;
   letter-spacing: 0.1em;
@@ -153,7 +153,7 @@
 .indicator {
   width: 10px;
   height: 10px;
-  border-radius: 50%;
+  border-radius: 0;
   background: rgba(255, 255, 255, 0.4);
   border: none;
   cursor: pointer;
@@ -167,7 +167,7 @@
 
 .indicator.active {
   width: 32px;
-  border-radius: 5px;
+  border-radius: 0;
   background: var(--color-accent-warm);
 }
 
